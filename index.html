@@ -285,7 +285,38 @@ button,select,input{font:inherit;color:inherit}
 .monp{display:block}
 .monp .nm{display:block;margin-top:2px}
 .monp .chip{display:inline-block;margin:0 6px 0 0;vertical-align:1px}
-</style></head><body><script>window.CRISE_API = { url: "https://ryhyvzwqtktaaonznizn.supabase.co/rest/v1/crise_processos?select=id,tribunal,uf,numero,numero_fmt,classe,vara,data_ajuizamento,ultimo_mov_data,situacao,devedor,devedor_tipo,cnpj,agro,n_pub,ultima_pub_data,ultima_pub_tipo,eventos,link,visto_ultimo,data_estimada,cnpj_fonte&situacao=neq.cancelado&order=data_ajuizamento.desc", key: "sb_publishable_Ji31DC1ihqZTR7gmLeYTLw_GHgBjWN0" };</script><div class="wrap" id="app">
+.veredito{display:grid;gap:2px;border-radius:8px;padding:10px 12px;font-size:13px;border:1px solid var(--line);background:var(--surface)}
+.veredito b{font-size:15px}
+.veredito.vende b{color:var(--accent)}
+.veredito.espera b{color:var(--good)}
+.ajlist{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));gap:12px;margin-bottom:14px}
+.ajcard{border:1px solid var(--line);border-radius:var(--r);background:var(--surface);padding:14px;display:grid;gap:10px;align-content:start}
+.ajcard.aberto{grid-column:1/-1}
+.ajh{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.ajh h3{margin:0;font-size:16px;line-height:1.25}
+.ajn{white-space:nowrap;font-size:13px;color:var(--muted)}
+.ajn b{font-family:var(--display);font-size:22px;color:var(--ink)}
+.ajcard .pactions{display:flex;flex-wrap:wrap;gap:8px}
+.ajcard .rjlist{display:grid;gap:6px}
+.link{background:none;border:0;padding:0;font:inherit;color:var(--accent);text-decoration:underline;cursor:pointer;text-align:left}
+#dossiePrint{display:none}
+@media print{
+  body>*:not(#dossiePrint){display:none!important}
+  #dossiePrint{display:block;color:#111;background:#fff;font:11pt/1.45 var(--body);max-width:none}
+  #dossiePrint header{display:flex;justify-content:space-between;font:9pt var(--mono);color:#555;border-bottom:2px solid #111;padding-bottom:6px;margin-bottom:14px}
+  #dossiePrint h1{font:800 22pt var(--display);font-stretch:85%;margin:0}
+  #dossiePrint .dsub{color:#555;margin:2px 0 10px}
+  #dossiePrint h2{font:700 13pt var(--display);font-stretch:88%;margin:16px 0 6px;border-bottom:1px solid #ccc;padding-bottom:3px;break-after:avoid}
+  #dossiePrint table{border-collapse:collapse;width:100%}
+  #dossiePrint th{text-align:left;font-weight:600;width:32%;padding:3px 8px 3px 0;vertical-align:top;color:#444}
+  #dossiePrint td{padding:3px 0;overflow-wrap:anywhere}
+  #dossiePrint ol,#dossiePrint ul{margin:0;padding-left:18px}
+  #dossiePrint li.pend{color:#888}
+  #dossiePrint footer{margin-top:18px;font-size:8.5pt;color:#555;border-top:1px solid #ccc;padding-top:6px}
+  @page{margin:16mm}
+}
+.cls.ca{background:var(--good-soft);color:var(--good)}
+</style></head><body><script>window.CRISE_API = { url: "https://ryhyvzwqtktaaonznizn.supabase.co/rest/v1/crise_processos?select=id,tribunal,uf,numero,numero_fmt,classe,vara,data_ajuizamento,ultimo_mov_data,situacao,devedor,devedor_tipo,cnpj,agro,n_pub,ultima_pub_data,ultima_pub_tipo,eventos,link,visto_ultimo,data_estimada,cnpj_fonte,aj,leilao_site&situacao=neq.cancelado&order=data_ajuizamento.desc", key: "sb_publishable_Ji31DC1ihqZTR7gmLeYTLw_GHgBjWN0" };</script><div class="wrap" id="app">
   <header class="top">
     <div class="brand">
       <span class="eyebrow">Recuperações judiciais e falências no Brasil</span>
@@ -300,6 +331,7 @@ button,select,input{font:inherit;color:inherit}
   <nav class="views" id="views" aria-label="Seções">
     <a href="#brasil" data-v="brasil" aria-current="page">Brasil</a>
     <a href="#exterior" data-v="exterior">Fora do Brasil</a>
+    <a href="#ajs" data-v="ajs">Administradores judiciais</a>
     <a href="#monitor" data-v="monitor">Monitorar meus CNPJs</a>
     <a href="#icms" data-v="icms">Crédito de ICMS</a>
   </nav>
@@ -323,6 +355,7 @@ button,select,input{font:inherit;color:inherit}
     </div>
     <div class="tabs" role="tablist" aria-label="Perfil" id="gTabs">
       <button type="button" role="tab" id="tab-creditos" data-p="creditos" aria-selected="true">Compro créditos</button>
+      <button type="button" role="tab" id="tab-vpl" data-p="vpl" aria-selected="false">Vender ou esperar o plano</button>
       <button type="button" role="tab" id="tab-ativos" data-p="ativos" aria-selected="false">Compro imóveis e ativos</button>
       <button type="button" role="tab" id="tab-servicos" data-p="servicos" aria-selected="false">Presto serviço</button>
     </div>
@@ -337,7 +370,7 @@ button,select,input{font:inherit;color:inherit}
     <aside class="filters" aria-label="Filtros">
       <div class="f"><label for="fBusca">Buscar empresa ou CNPJ</label><input type="search" id="fBusca" class="search" placeholder="Nome ou CNPJ"></div>
       <div class="f"><label for="fClasse">Tipo de processo</label><select id="fClasse">
-        <option value="">Todos</option><option value="RJ">Recuperação judicial</option><option value="Falência">Falência</option><option value="Extrajudicial">Recuperação extrajudicial</option></select></div>
+        <option value="">Todos</option><option value="RJ">Recuperação judicial</option><option value="Falência">Falência</option><option value="Extrajudicial">Recuperação extrajudicial</option><option value="Cautelar">Cautelar antes da recuperação</option></select></div>
       <div class="f"><label for="fUF">Estado</label><select id="fUF"></select></div>
       <div class="f"><label for="fPeriodo">Distribuído nos últimos</label><select id="fPeriodo">
         <option value="7">7 dias</option><option value="30">30 dias</option><option value="90" selected>90 dias</option><option value="365">12 meses</option><option value="0">Todo o período</option></select></div>
@@ -388,6 +421,22 @@ button,select,input{font:inherit;color:inherit}
     <div class="exresumo" id="exResumo"></div>
     <div class="exlist" id="exList"></div>
     <button class="btn more" id="exMais" type="button" hidden>Mostrar mais</button>
+  </div>
+
+  <div class="view" id="v-ajs" hidden>
+    <section class="intro">
+      <span class="eyebrow">Quem conduz cada caso</span>
+      <h2>Administradores judiciais</h2>
+      <p>O administrador judicial é nomeado pelo juiz para fiscalizar a empresa, montar a lista de credores, receber as habilitações e conduzir a assembleia. É o primeiro contato de quem quer comprar crédito, oferecer serviço ou acompanhar a venda de bens. O radar lê o nome nas publicações de cada processo e junta aqui quantos casos cada um conduz, em quais estados e em que fase.</p>
+    </section>
+    <div class="exfil">
+      <div class="f"><label for="ajUF">Estado</label><select id="ajUF"></select></div>
+      <input type="search" id="ajBusca" class="search" placeholder="Buscar administrador ou empresa" aria-label="Buscar administrador ou empresa">
+    </div>
+    <div class="exresumo" id="ajResumo"></div>
+    <div class="ajlist" id="ajList"></div>
+    <button class="btn more" id="ajMais" type="button" hidden>Mostrar mais</button>
+    <p class="sub">O nome é lido automaticamente das publicações e pode ter erro de grafia ou faltar em processos com poucas publicações. Contatos: use o botão de busca para achar o site oficial de cada administradora, onde ficam e-mail, telefone e os editais dos casos.</p>
   </div>
 
   <div class="view" id="v-monitor" hidden>
@@ -441,13 +490,14 @@ button,select,input{font:inherit;color:inherit}
   </div>
 
   <footer class="foot">
-    <span><b>De onde vêm os dados:</b> três vezes por dia o radar lê o Diário de Justiça Eletrônico Nacional (DJEN) e acha os pedidos novos assim que sai a primeira publicação; a lista completa vem da API pública do DataJud (CNJ), que leva algumas semanas para receber os processos. O CNPJ vem da própria publicação ou, quando o nome da empresa é único, da base aberta da Receita Federal (CNPJ da matriz). Exterior: CourtListener (processos de falência dos EUA), Portal Citius (Portugal) e Boletín Concursal (Chile). ICMS: exportações por estado do Comex Stat (MDIC). O nome da empresa e os marcos do processo são lidos automaticamente das publicações e podem conter erros: confira sempre no tribunal.</span>
+    <span><b>De onde vêm os dados:</b> três vezes por dia o radar lê o Diário de Justiça Eletrônico Nacional (DJEN) e acha os pedidos novos assim que sai a primeira publicação; a lista completa vem da API pública do DataJud (CNJ), que leva algumas semanas para receber os processos. O radar também capta as cautelares pedidas antes da recuperação judicial (art. 20-B da Lei 11.101 e pedidos de suspensão das execuções), que costumam anteceder o pedido de RJ. O administrador judicial e o site do leiloeiro são lidos nas mesmas publicações. O CNPJ vem da própria publicação ou, quando o nome da empresa é único, da base aberta da Receita Federal (CNPJ da matriz). Exterior: CourtListener (processos de falência dos EUA), Portal Citius (Portugal) e Boletín Concursal (Chile). ICMS: exportações por estado do Comex Stat (MDIC). O nome da empresa e os marcos do processo são lidos automaticamente das publicações e podem conter erros: confira sempre no tribunal.</span>
     <span><b>Privacidade:</b> o Radar Crise mostra apenas empresas. Quando o devedor é pessoa física (por exemplo, produtor rural), o nome não é exibido.</span>
     <span>Ferramenta de triagem. Não substitui a leitura dos autos nem a orientação de um advogado.</span>
   </footer>
 </div>
 
 <div id="detail" hidden></div>
+<div id="dossiePrint" aria-hidden="true"></div>
 <div class="toast" id="toast" hidden></div>
 
 <script>
@@ -459,8 +509,8 @@ button,select,input{font:inherit;color:inherit}
   const WHATS = "5531984025879";
   $("btnTestar").href = `https://wa.me/${WHATS}?text=${encodeURIComponent("Olá! Quero testar o Radar Crise (recuperações judiciais e falências).")}`;
 
-  const CL = { RJ: "Recuperação judicial", "Falência": "Pedido de falência", Extrajudicial: "Recuperação extrajudicial", "Autofalência": "Autofalência" };
-  const CLS = { RJ: "", "Falência": "fa", Extrajudicial: "ex", "Autofalência": "fa" };
+  const CL = { RJ: "Recuperação judicial", "Falência": "Pedido de falência", Extrajudicial: "Recuperação extrajudicial", "Autofalência": "Autofalência", Cautelar: "Cautelar antes da recuperação" };
+  const CLS = { RJ: "", "Falência": "fa", Extrajudicial: "ex", "Autofalência": "fa", Cautelar: "ca" };
   const EV = {
     deferido: "Processamento deferido", edital_credores: "Edital com lista de credores", agc: "Assembleia de credores",
     plano: "Plano de recuperação", concedida: "Plano aprovado / RJ concedida", venda_ativos: "Venda de ativos ou leilão",
@@ -492,8 +542,8 @@ button,select,input{font:inherit;color:inherit}
     $("kpis").innerHTML = [
       [em("RJ", 30), "pedidos de recuperação judicial em 30 dias"],
       [em("Falência", 30), "pedidos de falência em 30 dias"],
-      [base.filter(p => (p.eventos || []).includes("venda_ativos")).length, "processos com venda de ativos ou leilão"],
-      [base.filter(p => p.agro).length, "casos do agronegócio"]
+      [em("Cautelar", 30), "cautelares antes da recuperação em 30 dias"],
+      [base.filter(p => (p.eventos || []).includes("venda_ativos")).length, "processos com venda de ativos ou leilão"]
     ].map(([v, l]) => `<div class="kpi"><span class="v">${v.toLocaleString("pt-BR")}</span><span class="l">${l}</span></div>`).join("");
   }
 
@@ -507,7 +557,7 @@ button,select,input{font:inherit;color:inherit}
       const d = new Date(p.data_ajuizamento);
       const b = meses.find(x => x.y === d.getFullYear() && x.m === d.getMonth());
       if (!b) continue;
-      if (p.classe === "RJ") b.rj++; else if (p.classe === "Extrajudicial") b.ex++; else b.fa++;
+      if (p.classe === "RJ") b.rj++; else if (p.classe === "Extrajudicial") b.ex++; else if (p.classe !== "Cautelar") b.fa++;
     }
     const max = Math.max(1, ...meses.map(b => b.rj + b.fa + b.ex));
     const nomes = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"];
@@ -554,6 +604,9 @@ button,select,input{font:inherit;color:inherit}
       "<b>Fornecedores:</b> rever limite de crédito e garantias com a empresa."],
     "Falência": ["<b>Pedido de falência</b> não é falência decretada: muitos pedidos terminam em acordo ou pagamento (depósito elisivo).",
       "<b>Se a falência for decretada:</b> credores habilitam créditos e os bens vão a leilão, oportunidade para compradores de ativos."],
+    Cautelar: ["<b>Sinal antecipado:</b> a empresa pediu ao juiz para suspender cobranças e execuções (ou abrir mediação com credores) antes de entrar com a recuperação judicial. Em geral o pedido de RJ vem em até 30 a 60 dias.",
+      "<b>Credores e fornecedores:</b> é a hora de rever crédito e garantias, antes da suspensão das cobranças.",
+      "<b>Escritórios e consultorias:</b> a empresa já está com assessoria jurídica; credores ainda não. Oportunidade para oferecer representação aos credores."],
     Extrajudicial: ["<b>Recuperação extrajudicial</b> é um acordo negociado com parte dos credores e levado ao juiz para homologação.",
       "<b>Credores atingidos</b> podem impugnar no prazo do edital."]
   };
@@ -575,23 +628,54 @@ button,select,input{font:inherit;color:inherit}
         <div class="fact"><span class="k">Última publicação</span><span class="v">${p.ultima_pub_data ? fmtData(p.ultima_pub_data + "T12:00:00") : "–"}</span>${p.ultima_pub_tipo ? `<span class="conv">${esc(p.ultima_pub_tipo)}</span>` : ""}</div>
         <div class="fact"><span class="k">Publicações lidas</span><span class="v">${p.n_pub ?? "–"}</span></div>
         <div class="fact"><span class="k">Situação</span><span class="v">${esc(p.situacao)}</span></div>
+        <div class="fact"><span class="k">Administrador judicial</span><span class="v">${p.aj ? `<button type="button" class="link" data-aj="${esc(chaveAJ(p.aj))}">${esc(p.aj)}</button>` : "não identificado"}</span></div>
+        ${p.leilao_site ? `<div class="fact"><span class="k">Leilão citado no edital</span><span class="v"><a href="https://${esc(p.leilao_site)}" target="_blank" rel="noopener">${esc(p.leilao_site)}</a></span></div>` : ""}
         <div class="fact"><span class="k">Setor</span><span class="v">${p.agro ? "Agronegócio" : "–"}</span></div>
       </div>
       <div class="para"><h3>Marcos identificados nas publicações</h3>${evs.length ? `<ul class="timeline">${evs.map(e => `<li>${EV[e]}</li>`).join("")}</ul>` : "<p>Nenhum marco identificado ainda. Pode ser um pedido recente.</p>"}</div>
       <div class="para"><h3>Para quem é oportunidade</h3><ul>${(PARA[p.classe] || PARA.RJ).map(t => `<li>${t}</li>`).join("")}</ul></div>
       <div class="pactions">
         ${p.link && /^https?:\/\//.test(p.link) ? `<a class="btn primary" href="${esc(p.link)}" target="_blank" rel="noopener">Abrir no tribunal</a>` : ""}
-        <button class="btn" type="button" data-sim="${evs.includes("venda_ativos") || evs.includes("falencia_decretada") || p.classe === "Falência" ? "ativos" : "creditos"}">Simular o ganho</button>
+        <button class="btn" type="button" data-sim="${evs.includes("venda_ativos") || evs.includes("falencia_decretada") || p.classe === "Falência" ? "ativos" : evs.includes("concedida") || evs.includes("agc") ? "vpl" : "creditos"}">Simular o ganho</button>
         <button class="btn" type="button" id="copy">Copiar resumo</button>
+        ${window.self === window.top ? `<button class="btn" type="button" id="dossie">Dossiê em PDF</button>` : ""}
       </div>
     </aside>`;
     d.hidden = false;
     d.querySelector(".close").focus();
     d.onclick = e => { if (e.target.dataset.close) closeDetail(); };
+    if ($("dossie")) $("dossie").onclick = () => dossie(p);
     $("copy").onclick = () => {
       const t = `*Radar Crise* · ${CL[p.classe]}\n${p.devedor || (p.devedor_tipo === "PF" ? "Pessoa física" : "Empresa em identificação")}${p.cnpj ? " · CNPJ " + p.cnpj : ""}\n${p.uf} · ${p.vara || p.tribunal} · ${p.data_estimada ? "1ª publicação em" : "distribuído em"} ${fmtData(p.data_ajuizamento)}\nProcesso ${p.numero_fmt || p.numero}${evs.length ? "\nMarcos: " + evs.map(e => EV[e]).join(", ") : ""}`;
       try { navigator.clipboard.writeText(t).then(() => toast("Resumo copiado"), () => toast("Não foi possível copiar")); } catch (e) { toast("Não foi possível copiar"); }
     };
+  }
+  function dossie(p) {
+    const evs = ORDEM_EV.filter(e => (p.eventos || []).includes(e));
+    const raiz = (p.cnpj || "").replace(/\D/g, "").slice(0, 8);
+    const grupo = raiz ? ALL.filter(x => x !== p && (x.cnpj || "").replace(/\D/g, "").slice(0, 8) === raiz) : [];
+    const doAJ = p.aj ? ALL.filter(x => x.aj && x !== p && chaveAJ(x.aj) === chaveAJ(p.aj)) : [];
+    const nome = p.devedor || (p.devedor_tipo === "PF" ? "Pessoa física (nome não exibido)" : "Empresa em identificação");
+    const linha = (k, v) => v ? `<tr><th>${k}</th><td>${v}</td></tr>` : "";
+    const el = $("dossiePrint");
+    el.innerHTML = `<header><span>Radar Crise · Dossiê do caso</span><span>Gerado em ${new Date().toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" })}</span></header>
+      <h1>${esc(nome)}</h1>
+      <p class="dsub">${esc(CL[p.classe] || p.classe)} · ${esc(p.tribunal)} · ${esc(p.uf || "")}</p>
+      <h2>Dados do processo</h2>
+      <table>${linha("Número", esc(p.numero_fmt || p.numero))}${linha("Vara", esc(p.vara))}${linha(p.data_estimada ? "Primeira publicação" : "Distribuído em", fmtData(p.data_ajuizamento))}
+        ${linha("CNPJ", p.cnpj ? esc(p.cnpj) + (p.cnpj_fonte === "receita" ? " (matriz, base aberta da Receita Federal)" : " (lido na publicação)") : "não encontrado")}
+        ${linha("Situação", esc(p.situacao))}${linha("Administrador judicial", esc(p.aj || "não identificado"))}
+        ${linha("Última publicação", p.ultima_pub_data ? fmtData(p.ultima_pub_data + "T12:00:00") + (p.ultima_pub_tipo ? " · " + esc(p.ultima_pub_tipo) : "") : "")}
+        ${linha("Publicações lidas", p.n_pub ?? "")}${linha("Setor", p.agro ? "Agronegócio" : "")}${linha("Leilão citado no edital", p.leilao_site ? esc(p.leilao_site) : "")}${linha("Consulta", p.link && /^https?:\/\//.test(p.link) ? esc(p.link) : "")}</table>
+      <h2>Linha do tempo</h2>
+      ${evs.length ? `<ol>${ORDEM_EV.map(e => `<li class="${evs.includes(e) ? "feito" : "pend"}">${EV[e]}${evs.includes(e) ? "" : " · ainda não identificado"}</li>`).filter((_, i) => i < 7 || evs.includes(ORDEM_EV[i])).join("")}</ol>` : "<p>Nenhum marco identificado nas publicações até agora.</p>"}
+      ${grupo.length ? `<h2>Outros processos com a mesma raiz de CNPJ</h2><ul>${grupo.slice(0, 15).map(x => `<li>${esc(CL[x.classe] || x.classe)} · ${esc(x.uf || "")} · ${esc(x.numero_fmt || x.numero)} · ${fmtData(x.data_ajuizamento)}</li>`).join("")}</ul>` : ""}
+      ${p.aj ? `<h2>Sobre o administrador judicial</h2><p>${esc(p.aj)} aparece em ${doAJ.length + 1} processo${doAJ.length ? "s" : ""} do radar${doAJ.length ? ", em " + [...new Set(doAJ.concat(p).map(x => x.uf).filter(Boolean))].sort().join(", ") : ""}.</p>` : ""}
+      <h2>Para quem é oportunidade</h2><ul>${(PARA[p.classe] || PARA.RJ).map(t => `<li>${t}</li>`).join("")}</ul>
+      <footer>Fontes: Diário de Justiça Eletrônico Nacional (DJEN), DataJud (CNJ) e base aberta de CNPJ da Receita Federal. Nome, CNPJ, administrador e marcos são lidos automaticamente das publicações e podem conter erros: confira sempre nos autos. Este dossiê é material de triagem e não substitui a análise do processo por advogado.</footer>`;
+    document.title = "Dossiê " + nome.slice(0, 60);
+    window.print();
+    setTimeout(() => { document.title = "Radar Crise"; }, 1000);
   }
   function closeDetail() { $("detail").hidden = true; $("detail").innerHTML = ""; }
   function toast(m) { const t = $("toast"); t.textContent = m; t.hidden = false; clearTimeout(toast.h); toast.h = setTimeout(() => t.hidden = true, 2200); }
@@ -649,6 +733,35 @@ button,select,input{font:inherit;color:inherit}
         };
       }
     },
+    vpl: {
+      campos: [
+        ["face", "Valor do crédito na lista de credores", "R$", "", 300000, 10000],
+        ["desagio", "Deságio do plano", "", "% de desconto", 60, 1, "Quanto o plano corta da dívida. Está no plano de recuperação ou na ata da assembleia."],
+        ["carencia", "Carência até a 1ª parcela", "", "meses", 18, 1, "Contada a partir de hoje. Planos costumam prever de 12 a 24 meses."],
+        ["anos", "Prazo de pagamento depois da carência", "", "anos", 10, 1],
+        ["correcao", "Correção prevista no plano", "", "% ao ano", 3, 0.5, "Ex.: TR + 1% ao ano dá perto de 3%. Sem correção, use 0."],
+        ["taxa", "Quanto o dinheiro rende para você", "", "% ao ano", 14, 0.5, "Use o CDI ou o retorno que você exige. Quanto maior, menos vale receber no futuro."],
+        ["risco", "Chance de a empresa não cumprir o plano", "", "%", 25, 1, "Desconto pelo risco de a recuperação virar falência no meio do caminho."],
+        ["oferta", "Oferta à vista pelo crédito", "", "% do valor", 15, 1, "Quanto um comprador oferece hoje. Se ainda não tem oferta, deixe o valor de mercado."]
+      ],
+      calc: v => {
+        const saldo = v.face * (1 - v.desagio / 100), c = Math.pow(1 + v.correcao / 100, 1 / 12) - 1, d = Math.pow(1 + v.taxa / 100, 1 / 12) - 1;
+        const car = Math.max(0, Math.round(v.carencia)), n = Math.max(1, Math.round(v.anos * 12));
+        const corrigido = saldo * Math.pow(1 + c, car);
+        const parcela = c > 0 ? corrigido * c / (1 - Math.pow(1 + c, -n)) : corrigido / n;
+        let nominal = 0, pv = 0;
+        for (let t = car + 1; t <= car + n; t++) { nominal += parcela; pv += parcela / Math.pow(1 + d, t); }
+        const pvRisco = pv * (1 - v.risco / 100), oferta = v.face * v.oferta / 100, dif = oferta - pvRisco;
+        const vende = dif >= 0;
+        return {
+          big: pvRisco, bigL: "é quanto o crédito vale hoje, esperando o plano",
+          linhas: [["Parcela mensal prevista", R$(parcela)], ["Total que o plano paga ao longo do tempo", R$(nominal)], ["Valor de hoje, sem contar o risco", R$(pv)], ["Valor de hoje, com o risco", R$(pvRisco) + ` (${pct(pvRisco / v.face)} do crédito)`], ["Oferta à vista", R$(oferta)]],
+          barra: [["Valor de hoje esperando", pvRisco, "var(--good)"], ["Oferta à vista", oferta, "var(--accent)"]],
+          extra: `<div class="veredito ${vende ? "vende" : "espera"}"><b>${vende ? "Vender à vista compensa" : "Esperar o plano compensa"}</b><span>${vende ? `A oferta paga ${R$(dif)} a mais do que o crédito vale hoje esperando o plano.` : `Esperar vale ${R$(-dif)} a mais do que a oferta. Abaixo de ${pct(pvRisco / v.face)} do crédito, vender não compensa com esses números.`}</span></div>`,
+          nota: "Para quem compra crédito, o valor de hoje é o preço máximo a pagar para ter o retorno que você exige. Para o credor, é a régua para aceitar ou recusar uma oferta. Os números do plano estão no edital, no plano de recuperação ou na ata da assembleia: filtre por <b>Plano aprovado / RJ concedida</b>."
+        };
+      }
+    },
     servicos: {
       campos: [
         ["casos", "Casos novos por mês no Brasil", "", "casos", 250, 1, "Média real dos últimos 3 meses no radar."],
@@ -682,6 +795,7 @@ button,select,input{font:inherit;color:inherit}
     const tot = o.barra ? o.barra.reduce((s, b) => s + b[1], 0) : 0;
     $("res").innerHTML = `<div class="big${o.big < 0 ? " neg" : ""}"><span class="v">${R$(o.big)}</span><span class="l">${o.big < 0 ? "de prejuízo com esses números" : o.bigL}</span></div>
       ${o.barra && tot > 0 ? `<div class="barra"><div class="trilho">${o.barra.map(b => `<i style="width:${b[1] / tot * 100}%;background:${b[2]}"></i>`).join("")}</div><span>${o.barra.map(b => `${b[0]} ${R$(b[1])}`).join(" · ")}</span></div>` : ""}
+      ${o.extra || ""}
       <dl>${o.linhas.map(([k, x]) => `<dt>${k}</dt><dd>${x}</dd>`).join("")}</dl>
       <p class="nota">${o.nota}</p>`;
   }
@@ -705,7 +819,7 @@ button,select,input{font:inherit;color:inherit}
   });
 
   // ---------- Abas ----------
-  const VIEWS = ["brasil", "exterior", "monitor", "icms"];
+  const VIEWS = ["brasil", "exterior", "ajs", "monitor", "icms"];
   const iniciadas = {};
   function mostrarView(v) {
     if (!VIEWS.includes(v)) v = "brasil";
@@ -713,6 +827,7 @@ button,select,input{font:inherit;color:inherit}
     document.querySelectorAll("#views a").forEach(a => a.dataset.v === v ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current"));
     if (v === "exterior" && !iniciadas.exterior) { iniciadas.exterior = 1; carregarExterior(); }
     if (v === "icms" && !iniciadas.icms) { iniciadas.icms = 1; carregarIcms(); }
+    if (v === "ajs" && !iniciadas.ajs && ALL.length) { iniciadas.ajs = 1; iniciarAJ(); }
     if (v === "monitor" && !iniciadas.monitor) { iniciadas.monitor = 1; iniciarMonitor(); }
   }
   $("views").addEventListener("click", e => { const a = e.target.closest("a[data-v]"); if (!a) return; e.preventDefault(); try { history.replaceState(null, "", "#" + a.dataset.v); } catch (_) { /* */ } mostrarView(a.dataset.v); window.scrollTo({ top: $("views").offsetTop - 8 }); });
@@ -755,6 +870,77 @@ button,select,input{font:inherit;color:inherit}
   $("exBR").addEventListener("input", () => { exN = 40; renderExterior(); });
   $("exBusca").addEventListener("input", () => { exN = 40; renderExterior(); });
   $("exMais").onclick = () => { exN += 40; renderExterior(); };
+
+  // ---------- Administradores judiciais ----------
+  const chaveAJ = n => String(n || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase().replace(/\b(LTDA|ME|EPP|EIRELI|S\/?A|SS)\b/g, " ").replace(/[^A-Z0-9 ]/g, " ").replace(/\s+/g, " ").trim();
+  let AJS = [], ajN = 30, ajAberto = null;
+  function iniciarAJ() {
+    const m = new Map();
+    for (const p of ALL) {
+      if (!p.aj || p.situacao === "cancelado") continue;
+      const k = chaveAJ(p.aj);
+      const g = m.get(k) || { k, nome: p.aj, casos: [] };
+      g.casos.push(p); m.set(k, g);
+    }
+    AJS = [...m.values()].map(g => {
+      const nomes = {}; g.casos.forEach(p => nomes[p.aj] = (nomes[p.aj] || 0) + 1);
+      g.nome = Object.entries(nomes).sort((a, b) => b[1] - a[1])[0][0];
+      g.casos.sort((a, b) => (b.data_ajuizamento || "").localeCompare(a.data_ajuizamento || ""));
+      g.ativos = g.casos.filter(p => p.situacao === "ativo").length;
+      g.ufs = [...new Set(g.casos.map(p => p.uf).filter(Boolean))].sort();
+      g.rj = g.casos.filter(p => p.classe === "RJ" || p.classe === "Extrajudicial").length;
+      g.fal = g.casos.filter(p => p.classe === "Falência" || p.classe === "Autofalência").length;
+      g.ultimo = g.casos[0]?.data_ajuizamento || "";
+      g.leilao = g.casos.filter(p => (p.eventos || []).includes("venda_ativos")).length;
+      g.agc = g.casos.filter(p => (p.eventos || []).includes("agc")).length;
+      return g;
+    }).sort((a, b) => b.casos.length - a.casos.length || b.ultimo.localeCompare(a.ultimo));
+    const ufs = [...new Set(AJS.flatMap(g => g.ufs))].sort();
+    $("ajUF").innerHTML = `<option value="">Todos os estados</option>` + ufs.map(u => `<option>${u}</option>`).join("");
+    renderAJ();
+  }
+  function ajFiltrados() {
+    const b = chaveAJ($("ajBusca").value), uf = $("ajUF").value;
+    return AJS.filter(g => (!uf || g.ufs.includes(uf)) && (!b || g.k.includes(b) || g.casos.some(p => chaveAJ(p.devedor).includes(b))));
+  }
+  function renderAJ() {
+    const r = ajFiltrados(), uf = $("ajUF").value;
+    const comAJ = ALL.filter(p => p.aj && p.situacao !== "cancelado" && (!uf || p.uf === uf)).length;
+    const comMarco = ALL.filter(p => p.situacao !== "cancelado" && (!uf || p.uf === uf) && (p.eventos || []).some(e => ["deferido", "falencia_decretada", "agc", "edital_credores", "concedida"].includes(e))).length;
+    $("ajResumo").innerHTML = [[r.length, "administradores judiciais identificados"], [comAJ, "processos com o administrador identificado"], [comMarco, "processos já com deferimento, falência ou assembleia"]]
+      .map(([v, l]) => `<div class="kpi"><span class="v">${v.toLocaleString("pt-BR")}</span><span class="l">${l}</span></div>`).join("");
+    $("ajList").innerHTML = r.length ? r.slice(0, ajN).map(g => {
+      const casos = uf ? g.casos.filter(p => p.uf === uf) : g.casos;
+      const q = encodeURIComponent(`"${g.nome.replace(/\s+(LTDA|S\/?A|SS|ME|EPP)\.?$/i, "")}" administrador judicial contato`);
+      return `<article class="ajcard${ajAberto === g.k ? " aberto" : ""}" data-k="${esc(g.k)}">
+        <div class="ajh"><h3>${esc(g.nome)}</h3><span class="ajn"><b>${casos.length}</b> caso${casos.length > 1 ? "s" : ""}</span></div>
+        <div class="chips">${g.ufs.map(u => `<span class="chip">${u}</span>`).join("")}</div>
+        <dl class="exdl"><dt>Recuperações</dt><dd>${g.rj}</dd><dt>Falências</dt><dd>${g.fal}</dd><dt>Em andamento</dt><dd>${g.ativos}</dd>
+          ${g.agc ? `<dt>Com assembleia</dt><dd>${g.agc}</dd>` : ""}${g.leilao ? `<dt>Com venda de bens</dt><dd>${g.leilao}</dd>` : ""}
+          <dt>Caso mais recente</dt><dd>${fmtData(g.ultimo)}</dd></dl>
+        <div class="pactions"><button type="button" class="btn" data-ver="${esc(g.k)}">${ajAberto === g.k ? "Esconder casos" : "Ver casos"}</button>
+          <a class="btn" href="https://www.google.com/search?q=${q}" target="_blank" rel="noopener">Buscar contato</a></div>
+        ${ajAberto === g.k ? `<div class="rjlist">${casos.slice(0, 80).map(p => `<button type="button" class="monp" data-id="${esc(p.id)}"><b>${esc(CL[p.classe] || p.classe)}</b> · ${esc(p.uf || "")} · ${fmtData(p.data_ajuizamento)}${(p.eventos || []).length ? " · " + esc(EV[(p.eventos || []).slice().sort((a, b) => ORDEM_EV.indexOf(b) - ORDEM_EV.indexOf(a))[0]]) : ""}<span class="nm">${nomeDe(p)}</span></button>`).join("")}</div>` : ""}
+      </article>`;
+    }).join("") : `<p class="vazio">Nenhum administrador com esses filtros.</p>`;
+    $("ajMais").hidden = r.length <= ajN;
+  }
+  $("ajUF").addEventListener("input", () => { ajN = 30; renderAJ(); });
+  $("ajBusca").addEventListener("input", () => { ajN = 30; renderAJ(); });
+  $("ajMais").onclick = () => { ajN += 30; renderAJ(); };
+  $("ajList").addEventListener("click", e => {
+    const v = e.target.closest("[data-ver]"); if (v) { ajAberto = ajAberto === v.dataset.ver ? null : v.dataset.ver; renderAJ(); return; }
+    const b = e.target.closest(".monp[data-id]"); if (b) { const p = ALL.find(x => x.id === b.dataset.id); if (p) openDetail(p); }
+  });
+  document.addEventListener("click", e => {
+    const a = e.target.closest("[data-aj]"); if (!a) return;
+    closeDetail(); if (!iniciadas.ajs) { iniciadas.ajs = 1; iniciarAJ(); }
+    ajAberto = a.dataset.aj; $("ajBusca").value = ""; $("ajUF").value = "";
+    const i = AJS.findIndex(g => g.k === ajAberto); if (i >= ajN) ajN = i + 1;
+    try { history.replaceState(null, "", "#ajs"); } catch (_) { /* */ }
+    mostrarView("ajs"); renderAJ();
+    document.querySelector(`.ajcard[data-k="${CSS.escape(ajAberto)}"]`)?.scrollIntoView({ block: "start" });
+  });
 
   // ---------- Monitorar meus CNPJs ----------
   const LS = { get: k => { try { return localStorage.getItem(k); } catch (_) { return null; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch (_) { /* */ } } };
