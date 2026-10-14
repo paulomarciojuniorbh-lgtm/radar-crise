@@ -193,6 +193,98 @@ button,select,input{font:inherit;color:inherit}
 .agora{margin:0;font-size:14px;background:var(--accent-soft);border-radius:8px;padding:10px 14px}
 .agora b{font-variant-numeric:tabular-nums}
 @media (max-width:720px){.gbody{grid-template-columns:minmax(0,1fr)}.ghead h2{font-size:21px}}
+
+/* Abas */
+.views{display:flex;gap:4px;overflow-x:auto;border-bottom:1px solid var(--line);margin:4px 0 18px;scrollbar-width:none}
+.views a{flex:none;padding:10px 14px;font-weight:600;font-size:15px;color:var(--muted);text-decoration:none;border-bottom:3px solid transparent;margin-bottom:-1px;white-space:nowrap}
+.views a:hover{color:var(--ink)}
+.views a[aria-current="page"]{color:var(--accent);border-bottom-color:var(--accent)}
+.views a:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.view{display:grid;gap:18px}
+.intro{display:grid;gap:6px;max-width:72ch}
+.intro h2{font-family:var(--display);font-size:28px;font-stretch:90%;font-weight:800;margin:0;line-height:1.1;text-wrap:balance}
+.intro p{margin:0;color:var(--muted)}
+.vazio{color:var(--muted);padding:18px;text-align:center;border:1px dashed var(--line);border-radius:var(--r)}
+
+/* Fora do Brasil */
+.exfil{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.exfil .search{flex:1 1 220px;min-width:0;padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);font:inherit}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:var(--surface)}
+.seg button{font:inherit;font-size:14px;padding:7px 14px;border:0;background:transparent;color:var(--ink);cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+.exresumo{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+.exresumo .kpi:first-child{border-left:0}
+.exlist{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px}
+.excard{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px;display:grid;gap:10px;align-content:start;min-width:0}
+.exh{display:flex;gap:10px;align-items:flex-start}
+.exh h3{margin:0;font-size:16px;line-height:1.3;overflow-wrap:anywhere}
+.pais{flex:none;font-family:var(--mono);font-size:11px;font-weight:600;padding:3px 6px;border-radius:4px;background:var(--ink);color:var(--surface);letter-spacing:.04em}
+.exdl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;margin:0;font-size:13px}
+.exdl dt{color:var(--muted)}.exdl dd{margin:0;overflow-wrap:anywhere}
+.grupo{margin:0;font-size:12px;color:var(--muted);overflow-wrap:anywhere}
+.excard .btn{justify-self:start;font-size:14px;padding:7px 12px}
+
+/* Monitor */
+.mon{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:18px;align-items:start}
+.monin{display:grid;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px}
+.monin label,.alerta label:not(.check){font-size:13px;font-weight:600}
+.monin textarea{width:100%;min-width:0;font:15px/1.5 var(--mono);padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);resize:vertical}
+.ajuda{font-size:12px;color:var(--muted);margin:0}
+.monbtns{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.monres{display:grid;gap:10px}
+.monsum{font-size:15px;padding:12px 14px;background:var(--accent-soft);border-radius:8px}
+.monhit{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px;display:grid;gap:6px}
+.monhit h4{margin:0;font-family:var(--mono);font-size:13px;font-weight:500;color:var(--muted);overflow-wrap:anywhere}
+.monp{display:grid;gap:2px;text-align:left;font:inherit;font-size:14px;color:var(--ink);background:var(--sunk);border:1px solid transparent;border-radius:8px;padding:8px 10px;cursor:pointer;width:100%}
+.monp:hover{border-color:var(--accent)}
+.monp.ext{cursor:default}
+.monp .nm{font-size:13px;color:var(--muted);overflow-wrap:anywhere}
+.monp .chip{justify-self:start;margin-bottom:2px}
+.alerta{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;display:grid;gap:12px}
+.alerta h3{margin:0;font-size:17px}
+.agrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.alerta .fld{display:grid;gap:4px}
+.alerta input:not([type=checkbox]){font:inherit;padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);min-width:0}
+.aviso{font-size:14px;color:var(--muted)}
+
+/* ICMS */
+.icmsfil{display:flex;flex-wrap:wrap;gap:14px;align-items:end}
+.icmsfil .f{min-width:200px}
+.icmsfil .sub{margin:0;color:var(--muted);font-size:13px;flex:1 1 260px}
+.nichos{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px}
+.nicho{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px;display:grid;gap:8px;align-content:start;min-width:0}
+.nicho.interno{background:var(--sunk)}
+.nh{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.nh h3{margin:0;font-size:16px}
+.fob{font-family:var(--mono);font-size:14px;font-weight:500;white-space:nowrap;font-variant-numeric:tabular-nums}
+.nicho.interno .fob{font-family:var(--body);font-size:12px;color:var(--muted)}
+.nbar{height:6px;border-radius:3px;background:var(--sunk);overflow:hidden}
+.nbar i{display:block;height:100%;background:var(--accent)}
+.nicho p{margin:0;font-size:14px}
+.nicho .ntop{font-size:13px;color:var(--muted)}
+.rjn{font-size:13px;background:var(--mid-soft);padding:6px 10px;border-radius:6px}
+.link{font:inherit;color:var(--accent);background:none;border:0;padding:0;text-decoration:underline;cursor:pointer}
+.rjlist{display:grid;gap:6px;max-height:320px;overflow:auto}
+.regras{display:grid;gap:10px}
+.regras h3,.icrj h3{margin:0;font-size:18px}
+.rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.regra{border:1px solid var(--line);border-radius:var(--r);padding:12px;background:var(--surface);display:grid;gap:4px;align-content:start}
+.regra .uf{font-family:var(--mono);font-size:12px;color:var(--accent);font-weight:600}
+.regra h4{margin:0;font-size:15px}.regra p{margin:0;font-size:13px;color:var(--muted)}
+.regras .sub{margin:0;font-size:13px;color:var(--muted)}
+.icrj{display:grid;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px}
+.icrj > p{margin:0;max-width:75ch}
+.simicms{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:18px;align-items:start}
+@media (max-width:720px){
+  .exresumo{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .exresumo .kpi:nth-child(3){border-left:0}
+  .exresumo .kpi:nth-child(n+3){border-top:1px solid var(--line)}
+  .mon,.simicms,.agrid{grid-template-columns:minmax(0,1fr)}
+  .intro h2{font-size:23px}
+}
+.monp{display:block}
+.monp .nm{display:block;margin-top:2px}
+.monp .chip{display:inline-block;margin:0 6px 0 0;vertical-align:1px}
 </style></head><body><script>window.CRISE_API = { url: "https://ryhyvzwqtktaaonznizn.supabase.co/rest/v1/crise_processos?select=id,tribunal,uf,numero,numero_fmt,classe,vara,data_ajuizamento,ultimo_mov_data,situacao,devedor,devedor_tipo,cnpj,agro,n_pub,ultima_pub_data,ultima_pub_tipo,eventos,link,visto_ultimo&situacao=neq.cancelado&order=data_ajuizamento.desc", key: "sb_publishable_Ji31DC1ihqZTR7gmLeYTLw_GHgBjWN0" };</script><div class="wrap" id="app">
   <header class="top">
     <div class="brand">
@@ -205,6 +297,14 @@ button,select,input{font:inherit;color:inherit}
     </div>
   </header>
 
+  <nav class="views" id="views" aria-label="Seções">
+    <a href="#brasil" data-v="brasil" aria-current="page">Brasil</a>
+    <a href="#exterior" data-v="exterior">Fora do Brasil</a>
+    <a href="#monitor" data-v="monitor">Monitorar meus CNPJs</a>
+    <a href="#icms" data-v="icms">Crédito de ICMS</a>
+  </nav>
+
+  <div class="view" id="v-brasil">
   <div id="msg"></div>
   <section class="kpis" id="kpis" aria-label="Resumo"></section>
 
@@ -267,8 +367,81 @@ button,select,input{font:inherit;color:inherit}
     </section>
   </div>
 
+  </div>
+
+  <div class="view" id="v-exterior" hidden>
+    <section class="intro">
+      <span class="eyebrow">Estados Unidos · Portugal · Chile</span>
+      <h2>Empresas em crise fora do Brasil</h2>
+      <p>Grupos brasileiros que pedem proteção nos EUA (Nova York, Delaware, Texas, Flórida), insolvências e planos de revitalização em Portugal e reorganizações no Chile. Quando um grupo brasileiro entra no Chapter 15, ele pede que a recuperação judicial do Brasil valha também nos EUA, o que protege bens e contas lá fora.</p>
+    </section>
+    <div class="exfil">
+      <div class="seg" role="group" aria-label="País" id="exPais">
+        <button type="button" data-p="" aria-pressed="true">Todos</button>
+        <button type="button" data-p="EUA" aria-pressed="false">EUA</button>
+        <button type="button" data-p="Portugal" aria-pressed="false">Portugal</button>
+        <button type="button" data-p="Chile" aria-pressed="false">Chile</button>
+      </div>
+      <label class="check"><input type="checkbox" id="exBR"> Só com ligação com o Brasil</label>
+      <input type="search" id="exBusca" class="search" placeholder="Buscar empresa" aria-label="Buscar empresa">
+    </div>
+    <div class="exresumo" id="exResumo"></div>
+    <div class="exlist" id="exList"></div>
+    <button class="btn more" id="exMais" type="button" hidden>Mostrar mais</button>
+  </div>
+
+  <div class="view" id="v-monitor" hidden>
+    <section class="intro">
+      <span class="eyebrow">Para escritórios, fornecedores e bancos</span>
+      <h2>Monitorar meus CNPJs</h2>
+      <p>Cole a lista de CNPJs ou nomes das empresas que você quer acompanhar: clientes, devedores ou fornecedores. O radar cruza com todos os processos de recuperação judicial e falência e mostra quem já está em crise. A lista fica salva só neste aparelho.</p>
+    </section>
+    <div class="mon">
+      <div class="monin">
+        <label for="monLista">CNPJs ou nomes, um por linha</label>
+        <textarea id="monLista" rows="8" placeholder="12.345.678/0001-90&#10;Transportadora Exemplo&#10;98.765.432"></textarea>
+        <p class="ajuda">Use o CNPJ completo, só a raiz (8 primeiros números) ou o nome da empresa.</p>
+        <div class="monbtns">
+          <button class="btn primary" type="button" id="monVer">Verificar agora</button>
+          <button class="btn" type="button" id="monExemplo">Usar exemplo</button>
+        </div>
+      </div>
+      <div class="monres" id="monRes" aria-live="polite"></div>
+    </div>
+    <form class="alerta" id="monForm" novalidate>
+      <h3>Receber aviso quando alguém da lista pedir recuperação ou falência</h3>
+      <div class="agrid">
+        <div class="fld"><label for="aNome">Seu nome</label><input id="aNome" required maxlength="120"></div>
+        <div class="fld"><label for="aEmpresa">Escritório ou empresa</label><input id="aEmpresa" maxlength="160"></div>
+        <div class="fld"><label for="aEmail">E-mail</label><input id="aEmail" type="email" maxlength="160"></div>
+        <div class="fld"><label for="aZap">WhatsApp</label><input id="aZap" inputmode="tel" maxlength="30" placeholder="(31) 99999-9999"></div>
+      </div>
+      <label class="check"><input type="checkbox" id="aAceite"> Autorizo o Radar Crise a guardar meu contato e esta lista para enviar os avisos.</label>
+      <div class="monbtns"><button class="btn primary" type="submit" id="aEnviar">Quero receber os avisos</button><span class="aviso" id="aMsg" role="status"></span></div>
+    </form>
+  </div>
+
+  <div class="view" id="v-icms" hidden>
+    <section class="intro">
+      <span class="eyebrow">Oportunidade tributária por nicho</span>
+      <h2>Crédito de ICMS acumulado</h2>
+      <p>Empresa que vende para fora do país ou com imposto reduzido paga ICMS na compra e não tem como usar esse crédito na venda. O saldo fica parado. Ele pode ser recuperado, usado para pagar fornecedores ou vendido a outras empresas com desconto, conforme as regras de cada estado. Aqui estão os nichos onde isso mais acontece e o tamanho de cada um por estado.</p>
+    </section>
+    <div class="icmsfil">
+      <div class="f"><label for="icUF">Estado</label><select id="icUF"></select></div>
+      <p class="sub" id="icFonte"></p>
+    </div>
+    <div class="nichos" id="icNichos"></div>
+    <section class="regras">
+      <h3>Como cada estado deixa usar ou vender o crédito</h3>
+      <div class="rgrid" id="icRegras"></div>
+      <p class="sub">Regras resumidas para conversa inicial. Prazos, limites e exigências mudam com frequência: confirme com um tributarista antes de fechar negócio.</p>
+    </section>
+    <section class="icrj" id="icRJ"></section>
+  </div>
+
   <footer class="foot">
-    <span><b>De onde vêm os dados:</b> lista de processos da API pública do DataJud (CNJ) e publicações do Diário de Justiça Eletrônico Nacional (DJEN), atualizadas todo dia. O nome da empresa e os marcos do processo são lidos automaticamente das publicações e podem conter erros: confira sempre no tribunal.</span>
+    <span><b>De onde vêm os dados:</b> lista de processos da API pública do DataJud (CNJ) e publicações do Diário de Justiça Eletrônico Nacional (DJEN), atualizadas todo dia. Exterior: CourtListener (processos de falência dos EUA), Portal Citius (Portugal) e Boletín Concursal (Chile). ICMS: exportações por estado do Comex Stat (MDIC). O nome da empresa e os marcos do processo são lidos automaticamente das publicações e podem conter erros: confira sempre no tribunal.</span>
     <span><b>Privacidade:</b> o Radar Crise mostra apenas empresas. Quando o devedor é pessoa física (por exemplo, produtor rural), o nome não é exibido.</span>
     <span>Ferramenta de triagem. Não substitui a leitura dos autos nem a orientação de um advogado.</span>
   </footer>
@@ -527,9 +700,222 @@ button,select,input{font:inherit;color:inherit}
   desenhaForm();
   document.addEventListener("click", e => {
     const b = e.target.closest("[data-sim]"); if (!b) return;
-    perfil = b.dataset.sim; closeDetail(); desenhaForm();
+    perfil = b.dataset.sim; closeDetail(); desenhaForm(); if ($("v-brasil").hidden) mostrarView("brasil");
     $("ganho").scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
   });
+
+  // ---------- Abas ----------
+  const VIEWS = ["brasil", "exterior", "monitor", "icms"];
+  const iniciadas = {};
+  function mostrarView(v) {
+    if (!VIEWS.includes(v)) v = "brasil";
+    VIEWS.forEach(x => { $("v-" + x).hidden = x !== v; });
+    document.querySelectorAll("#views a").forEach(a => a.dataset.v === v ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current"));
+    if (v === "exterior" && !iniciadas.exterior) { iniciadas.exterior = 1; carregarExterior(); }
+    if (v === "icms" && !iniciadas.icms) { iniciadas.icms = 1; carregarIcms(); }
+    if (v === "monitor" && !iniciadas.monitor) { iniciadas.monitor = 1; iniciarMonitor(); }
+  }
+  $("views").addEventListener("click", e => { const a = e.target.closest("a[data-v]"); if (!a) return; e.preventDefault(); try { history.replaceState(null, "", "#" + a.dataset.v); } catch (_) { /* */ } mostrarView(a.dataset.v); window.scrollTo({ top: $("views").offsetTop - 8 }); });
+  window.addEventListener("hashchange", () => mostrarView(location.hash.slice(1)));
+  const REST = (window.CRISE_API?.url || "").split("/rest/v1/")[0] + "/rest/v1/";
+  const getJSON = async (path) => { const r = await fetch(REST + path, { headers: { apikey: window.CRISE_API.key } }); if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); };
+
+  // ---------- Fora do Brasil ----------
+  let EXT = [], exPais = "", exN = 40;
+  const BANDEIRA = { EUA: "EUA", Portugal: "PT", Chile: "CL" };
+  async function carregarExterior() {
+    $("exList").innerHTML = `<p class="vazio">Carregando…</p>`;
+    try { EXT = await getJSON("crise_exterior?select=*&order=data_inicio.desc.nullslast&limit=5000"); }
+    catch (e) { EXT = (window.CRISE_SNAPSHOT && window.CRISE_SNAPSHOT.exterior) || []; }
+    renderExterior();
+  }
+  function exFiltrados() {
+    const b = $("exBusca").value.trim().toLowerCase(), br = $("exBR").checked;
+    return EXT.filter(x => (!exPais || x.pais === exPais) && (!br || x.ligacao_brasil) && (!b || (x.empresa + " " + (x.grupo || "")).toLowerCase().includes(b)))
+      .sort((a, c) => (c.ultima_data || c.data_inicio || "").localeCompare(a.ultima_data || a.data_inicio || ""));
+  }
+  function renderExterior() {
+    const r = exFiltrados();
+    const cont = p => EXT.filter(x => x.pais === p).length, br = EXT.filter(x => x.ligacao_brasil).length;
+    $("exResumo").innerHTML = [["EUA", "processos nos EUA ligados ao Brasil"], ["Portugal", "empresas em insolvência ou revitalização em Portugal"], ["Chile", "empresas em reorganização ou liquidação no Chile"]]
+      .map(([p, l]) => `<div class="kpi"><span class="v">${cont(p).toLocaleString("pt-BR")}</span><span class="l">${l}</span></div>`).join("") +
+      `<div class="kpi"><span class="v">${br.toLocaleString("pt-BR")}</span><span class="l">com ligação com o Brasil</span></div>`;
+    $("exList").innerHTML = r.length ? r.slice(0, exN).map(x => `<article class="excard">
+      <div class="exh"><span class="pais">${BANDEIRA[x.pais] || esc(x.pais)}</span><h3>${esc(x.empresa)}</h3></div>
+      <div class="chips">${x.ligacao_brasil ? `<span class="chip fin">${esc(x.ligacao_brasil)}</span>` : ""}<span class="chip">${esc(x.tipo || "")}</span></div>
+      <dl class="exdl"><dt>Tribunal</dt><dd>${esc(x.tribunal || "–")}</dd><dt>Processo</dt><dd>${esc(x.numero || "–")}</dd>
+      <dt>${x.pais === "EUA" ? "Pedido em" : "Início"}</dt><dd>${x.data_inicio ? fmtData(x.data_inicio + "T12:00:00") : "–"}</dd>
+      ${x.ultimo_ato ? `<dt>Último ato</dt><dd>${esc(x.ultimo_ato)}${x.ultima_data ? " · " + fmtData(x.ultima_data + "T12:00:00") : ""}</dd>` : ""}</dl>
+      ${x.grupo ? `<p class="grupo">${esc(x.grupo)}</p>` : ""}
+      ${x.link && /^https?:\/\//.test(x.link) ? `<a class="btn" href="${esc(x.link)}" target="_blank" rel="noopener">${x.pais === "EUA" ? "Ver processo" : "Abrir na fonte oficial"}</a>` : ""}
+    </article>`).join("") : `<p class="vazio">Nenhum processo com esses filtros.</p>`;
+    $("exMais").hidden = r.length <= exN;
+  }
+  $("exPais").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; exPais = b.dataset.p; exN = 40; document.querySelectorAll("#exPais button").forEach(x => x.setAttribute("aria-pressed", x === b)); renderExterior(); });
+  $("exBR").addEventListener("input", () => { exN = 40; renderExterior(); });
+  $("exBusca").addEventListener("input", () => { exN = 40; renderExterior(); });
+  $("exMais").onclick = () => { exN += 40; renderExterior(); };
+
+  // ---------- Monitorar meus CNPJs ----------
+  const LS = { get: k => { try { return localStorage.getItem(k); } catch (_) { return null; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch (_) { /* */ } } };
+  const semAcento = s => String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toUpperCase();
+  const SUFIXO = /\b(LTDA|S\/?A|S\.A\.?|ME|EPP|EIRELI|LIMITADA|CIA|COMPANHIA|EM RECUPERACAO JUDICIAL)\b\.?/g;
+  const normNome = s => semAcento(s).replace(SUFIXO, " ").replace(/[^A-Z0-9 ]/g, " ").replace(/\s+/g, " ").trim();
+  function itensDaLista() { return $("monLista").value.split(/\n|;/).map(s => s.trim()).filter(Boolean).slice(0, 500); }
+  function cruzar(itens) {
+    const out = [];
+    for (const it of itens) {
+      const dig = it.replace(/\D/g, ""), nome = normNome(it);
+      const achou = ALL.filter(p => {
+        const c = (p.cnpj || "").replace(/\D/g, "");
+        if (dig.length === 14) return c === dig;
+        if (dig.length >= 8 && /^\d[\d.\/-]*$/.test(it.trim())) return c.slice(0, 8) === dig.slice(0, 8);
+        if (nome.length >= 5) return normNome(p.devedor).includes(nome);
+        return false;
+      });
+      const ext = nome.length >= 5 && !/^\d+$/.test(dig) ? EXT.filter(x => normNome(x.empresa + " " + (x.grupo || "")).includes(nome)) : [];
+      out.push({ it, achou, ext });
+    }
+    return out;
+  }
+  function verificarMonitor() {
+    const itens = itensDaLista();
+    LS.set("rc_monitor", itens.join("\n"));
+    if (!itens.length) { $("monRes").innerHTML = `<p class="vazio">Cole pelo menos um CNPJ ou nome.</p>`; return; }
+    const vistos = new Set((LS.get("rc_monitor_vistos") || "").split(",").filter(Boolean));
+    const res = cruzar(itens), hits = res.filter(r => r.achou.length || r.ext.length);
+    const novos = [];
+    $("monRes").innerHTML = `<div class="monsum"><b>${hits.length}</b> de ${itens.length} empresa${itens.length > 1 ? "s" : ""} da lista aparece${hits.length === 1 ? "" : "m"} em processos de crise.</div>` +
+      (hits.length ? hits.map(r => `<div class="monhit"><h4>${esc(r.it)}</h4>${r.achou.map(p => {
+        const novo = !vistos.has(p.id); if (novo) novos.push(p.id);
+        return `<button type="button" class="monp" data-id="${esc(p.id)}">${novo ? '<span class="chip warn">Novo</span>' : ""}<b>${esc(CL[p.classe] || p.classe)}</b> · ${esc(p.uf || "")} · desde ${fmtData(p.data_ajuizamento)}${(p.eventos || []).length ? " · " + esc(EV[(p.eventos || []).slice().sort((a, b) => ORDEM_EV.indexOf(b) - ORDEM_EV.indexOf(a))[0]]) : ""}<span class="nm">${nomeDe(p)}</span></button>`;
+      }).join("")}${r.ext.map(x => `<div class="monp ext"><b>${esc(x.pais)}</b> · ${esc(x.tipo || "")}<span class="nm">${esc(x.empresa)}</span></div>`).join("")}</div>`).join("")
+        : `<p class="vazio">Nenhuma empresa da lista está em recuperação judicial ou falência no radar. Ótimo sinal.</p>`) +
+      `<p class="ajuda">Busca feita em ${ALL.length.toLocaleString("pt-BR")} processos do Brasil e ${EXT.length.toLocaleString("pt-BR")} do exterior. Empresas ainda sem nome identificado não aparecem na busca por nome.</p>`;
+    LS.set("rc_monitor_vistos", [...vistos, ...novos].join(","));
+  }
+  async function iniciarMonitor() {
+    const salvo = LS.get("rc_monitor"); if (salvo) $("monLista").value = salvo;
+    if (!EXT.length) { try { EXT = await getJSON("crise_exterior?select=*&limit=5000"); } catch (_) { EXT = (window.CRISE_SNAPSHOT && window.CRISE_SNAPSHOT.exterior) || []; } }
+    if (salvo) verificarMonitor();
+  }
+  $("monVer").onclick = verificarMonitor;
+  $("monExemplo").onclick = () => {
+    const ex = ALL.filter(p => p.devedor && p.cnpj).slice(0, 2).map(p => p.cnpj).concat(ALL.filter(p => p.devedor && !p.cnpj).slice(0, 1).map(p => p.devedor.split(" e mais")[0]), ["11.222.333/0001-81"]);
+    $("monLista").value = ex.join("\n"); verificarMonitor();
+  };
+  $("monRes").addEventListener("click", e => { const b = e.target.closest(".monp[data-id]"); if (b) { const p = ALL.find(x => x.id === b.dataset.id); if (p) openDetail(p); } });
+  $("monForm").addEventListener("submit", async e => {
+    e.preventDefault();
+    const nome = $("aNome").value.trim(), email = $("aEmail").value.trim(), zap = $("aZap").value.trim(), itens = itensDaLista();
+    const msg = t => { $("aMsg").textContent = t; };
+    if (nome.length < 2) return msg("Escreva seu nome.");
+    if (!email && !zap) return msg("Informe um e-mail ou WhatsApp para receber os avisos.");
+    if (email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return msg("Confira o e-mail.");
+    if (!itens.length) return msg("Cole a lista de CNPJs ou nomes acima.");
+    if (!$("aAceite").checked) return msg("Marque a autorização para guardarmos seu contato.");
+    $("aEnviar").disabled = true; msg("Enviando…");
+    try {
+      const r = await fetch(REST + "crise_monitor", { method: "POST", headers: { apikey: window.CRISE_API.key, "Content-Type": "application/json", Prefer: "return=minimal" },
+        body: JSON.stringify({ nome, email: email || null, whatsapp: zap || null, empresa: $("aEmpresa").value.trim() || null, itens, aceite: true }) });
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      msg(`Pronto. Você vai receber os avisos sobre ${itens.length} empresa${itens.length > 1 ? "s" : ""}.`); toast("Cadastro feito");
+    } catch (err) { msg("Não deu para enviar agora. Tente de novo ou fale pelo WhatsApp (31) 98402-5879."); }
+    $("aEnviar").disabled = false;
+  });
+  // ---------- Crédito de ICMS acumulado ----------
+  const NICHOS = [
+    { id: "graos", nome: "Soja, milho, farelo e óleos", sh4: ["c12", "c10", "c23", "c15"], kw: /\b(soja|gr[aã]os|cereais|milho|cerealista|armaz[eé]ns gerais|trading)\b/i,
+      porque: "Exportação não paga ICMS, mas a empresa pagou imposto no frete, na energia, nos insumos e nas compras de outros estados. Tradings, cerealistas e esmagadoras acumulam saldo grande." },
+    { id: "carnes", nome: "Carnes e frigoríficos", sh4: ["c02", "c16"], kw: /\b(frigor[ií]fic\w*|carnes?|abatedouro|aves|su[ií]nos)\b/i,
+      porque: "Frigoríficos exportadores compram gado, ração, embalagens e energia com ICMS e vendem boa parte para fora sem imposto." },
+    { id: "cafe", nome: "Café", sh4: ["c09"], kw: /\b(caf[eé]|torrefa\w*)\b/i, porque: "Exportadoras e cooperativas de café acumulam crédito das compras de sacaria, frete e armazenagem." },
+    { id: "acucar", nome: "Açúcar, etanol e bebidas", sh4: ["c17", "c22"], kw: /\b(usina|a[cç][uú]car|etanol|sucroalcool\w*|sucroenerg\w*|destilaria|bioenergia)\b/i,
+      porque: "Usinas exportam açúcar sem ICMS e acumulam crédito de insumos, diesel, peças e energia. Muitas estão em recuperação judicial." },
+    { id: "celulose", nome: "Celulose e papel", sh4: ["c47", "c48"], kw: /\b(celulose|papel|papel[aã]o|embalagens)\b/i, porque: "Setor muito exportador e com uso intenso de químicos e energia, que geram crédito." },
+    { id: "minerio", nome: "Minério e metais", sh4: ["c26", "c72", "c76"], kw: /\b(minera[cç][aã]o|miner\w*|sider[uú]rg\w*|metal[uú]rg\w*|gusa|ferro|alum[ií]nio)\b/i,
+      porque: "Mineradoras e siderúrgicas exportadoras estão entre as maiores donas de crédito acumulado do país, sobretudo em MG e PA." },
+    { id: "frutas", nome: "Sucos, frutas e conservas", sh4: ["c20", "c08"], kw: /\b(citr\w*|suco|frutas?|laranja)\b/i, porque: "Exportadores de suco e frutas acumulam crédito de embalagens, frete e insumos." },
+    { id: "algodao", nome: "Algodão, fumo e cacau", sh4: ["c52", "c24", "c18"], kw: /\b(algod[aã]o|fumo|tabaco|cacau|t[eê]xtil|fia[cç][aã]o)\b/i, porque: "Commodities agrícolas exportadas que carregam crédito das compras e do beneficiamento." },
+    { id: "maquinas", nome: "Máquinas, veículos e autopeças", sh4: ["c84", "c87"], kw: /\b(m[aá]quinas|implementos|autope[cç]as|ve[ií]culos|tratores|metalmec[aâ]nic\w*)\b/i,
+      porque: "Exportam parte da produção e, no mercado interno, várias máquinas têm ICMS reduzido (Convênio ICMS 52/91). O crédito das peças compradas fica maior que o imposto da venda." },
+    { id: "couro", nome: "Couro e calçados", sh4: ["c41", "c64"], kw: /\b(couros?|curtume|cal[cç]ados)\b/i, porque: "Curtumes e calçadistas exportadores acumulam crédito de químicos, energia e componentes." },
+    { id: "madeira", nome: "Madeira e móveis", sh4: ["c44", "c94"], kw: /\b(madeir\w*|m[oó]veis|compensados|serraria)\b/i, porque: "Madeireiras e moveleiras exportadoras acumulam crédito de insumos, frete e energia." }
+  ];
+  const NICHOS_INTERNOS = [
+    { nome: "Insumos agropecuários", texto: "Fertilizantes, defensivos, sementes e ração vendidos com ICMS reduzido ou isento (Convênio ICMS 100/97). A indústria e o distribuidor pagam imposto cheio na compra e acumulam saldo.", kw: /\b(fertilizantes?|defensivos?|sementes|ra[cç][aã]o|ra[cç][oõ]es|insumos agr\w*|agroqu[ií]mic\w*|nutri[cç][aã]o animal)\b/i },
+    { nome: "Venda interestadual com alíquota de 4%", texto: "Indústrias e importadores que vendem produto importado para outros estados pagam só 4% (Resolução do Senado 13/2012), mas creditaram mais na entrada.", kw: /\b(importa\w*|com[eé]rcio exterior|trading)\b/i },
+    { nome: "ICMS-ST pago a mais", texto: "Quem compra com substituição tributária e vende por preço menor que o presumido pode pedir de volta a diferença (STF, Tema 201). Comum em combustíveis, bebidas, autopeças, medicamentos e materiais de construção.", kw: /\b(combust[ií]ve\w*|postos?|bebidas|distribuidora|farm[aá]cia|drogaria|medicamentos|materiais de constru[cç][aã]o)\b/i }
+  ];
+  const REGRAS = [
+    ["SP", "São Paulo", "Sistema e-CredAc. Depois de autorizado, o crédito pode ser usado para comprar de fornecedores, transferido para outra empresa ou para outro estabelecimento do grupo."],
+    ["MG", "Minas Gerais", "Transferência do crédito acumulado (exportação e outras hipóteses) para outros contribuintes mineiros, com pedido à Secretaria da Fazenda."],
+    ["PR", "Paraná", "Sistema Siscred. Crédito pode pagar fornecedores e ser transferido a terceiros dentro dos limites liberados."],
+    ["RS", "Rio Grande do Sul", "Transferência do saldo credor de exportação para outras empresas gaúchas, com autorização e limites."],
+    ["Outros", "Demais estados", "A Lei Kandir (LC 87/96, art. 25) garante a transferência do saldo de exportação para outras unidades da empresa no estado e, sobrando, para outros contribuintes do estado, com documento da Fazenda. Cada estado define o caminho."]
+  ];
+  let ICMS = [], icAno = null;
+  async function carregarIcms() {
+    try { ICMS = await getJSON("crise_icms_exp?select=uf,sh4,ano,fob&order=ano.desc&limit=5000"); }
+    catch (e) { ICMS = (window.CRISE_SNAPSHOT && window.CRISE_SNAPSHOT.icms) || []; }
+    icAno = ICMS.reduce((m, x) => Math.max(m, x.ano), 0) || null;
+    ICMS = ICMS.filter(x => x.ano === icAno);
+    const ufs = [...new Set(ICMS.map(x => x.uf))].sort();
+    $("icUF").innerHTML = `<option value="">Brasil inteiro</option>` + ufs.map(u => `<option>${u}</option>`).join("");
+    $("icFonte").textContent = icAno ? `Exportações de ${icAno} em dólares, por capítulo de produto (Comex Stat, MDIC). Quanto mais o estado exporta no nicho, mais crédito tende a ficar parado.` : "Dados de exportação indisponíveis no momento.";
+    $("icRegras").innerHTML = REGRAS.map(([uf, nome, t]) => `<div class="regra"><span class="uf">${uf}</span><h4>${nome}</h4><p>${t}</p></div>`).join("");
+    renderIcms();
+  }
+  const US$ = v => "US$ " + (v >= 1e9 ? (v / 1e9).toLocaleString("pt-BR", { maximumFractionDigits: 1 }) + " bi" : v >= 1e6 ? (v / 1e6).toLocaleString("pt-BR", { maximumFractionDigits: 0 }) + " mi" : Math.round(v).toLocaleString("pt-BR"));
+  function renderIcms() {
+    const uf = $("icUF").value;
+    const base = ICMS.filter(x => !uf || x.uf === uf);
+    const lista = NICHOS.map(n => {
+      const rows = base.filter(x => n.sh4.includes(x.sh4));
+      const fob = rows.reduce((s, x) => s + (+x.fob || 0), 0);
+      const porUF = {}; rows.forEach(x => porUF[x.uf] = (porUF[x.uf] || 0) + (+x.fob || 0));
+      const top = Object.entries(porUF).sort((a, b) => b[1] - a[1]).slice(0, 3);
+      const rj = ALL.filter(p => p.devedor && p.situacao === "ativo" && (!uf || p.uf === uf) && n.kw.test(p.devedor));
+      return { ...n, fob, top, rj };
+    }).filter(n => n.fob > 0 || n.rj.length).sort((a, b) => b.fob - a.fob);
+    const max = Math.max(1, ...lista.map(n => n.fob));
+    $("icNichos").innerHTML = lista.map(n => `<article class="nicho">
+      <div class="nh"><h3>${n.nome}</h3><span class="fob">${n.fob ? US$(n.fob) : "–"}</span></div>
+      <div class="nbar"><i style="width:${(n.fob / max * 100).toFixed(1)}%"></i></div>
+      <p>${n.porque}</p>
+      ${!uf && n.top.length ? `<p class="ntop">Onde mais exporta: ${n.top.map(([u, v]) => `<b>${u}</b> ${US$(v)}`).join(" · ")}</p>` : ""}
+      ${n.rj.length ? `<p class="rjn"><b>${n.rj.length}</b> empresa${n.rj.length > 1 ? "s" : ""} do nicho em recuperação ou falência${uf ? " em " + uf : ""}. <button type="button" class="link" data-nicho="${n.id}">Ver empresas</button></p>` : ""}
+    </article>`).join("") + NICHOS_INTERNOS.map(n => {
+      const rj = ALL.filter(p => p.devedor && p.situacao === "ativo" && (!uf || p.uf === uf) && n.kw.test(p.devedor)).length;
+      return `<article class="nicho interno"><div class="nh"><h3>${n.nome}</h3><span class="fob">mercado interno</span></div><p>${n.texto}</p>${rj ? `<p class="rjn"><b>${rj}</b> empresa${rj > 1 ? "s" : ""} do nicho em recuperação ou falência.</p>` : ""}</article>`;
+    }).join("");
+    $("icRJ").innerHTML = `<h3>Por que olhar as empresas em recuperação</h3><p>Uma empresa em recuperação judicial com crédito de ICMS parado tem um ativo que pode virar dinheiro para pagar credores. Para o tributarista, é um serviço de alto valor. Para quem compra crédito, é uma chance de comprar com desconto. Com a reforma tributária, o ICMS acaba em 2033 e o saldo que sobrar só poderá ser compensado com o novo imposto (IBS) aos poucos, em até 20 anos (Emenda Constitucional 132/2023). Isso aumenta a pressa de usar ou vender o crédito agora.</p>
+      <div class="simicms"><div class="sim" id="icSim">
+        <div class="fld"><label for="icSaldo">Crédito acumulado da empresa</label><div class="in"><span>R$</span><input id="icSaldo" type="number" min="0" step="10000" value="2000000"></div></div>
+        <div class="fld"><label for="icDesc">Desconto na venda do crédito</label><div class="in"><input id="icDesc" type="number" min="0" max="90" step="1" value="15"><span>%</span></div><span class="ajuda">Varia por estado, prazo e risco da operação.</span></div>
+        <div class="fld"><label for="icFee">Honorário de quem estrutura</label><div class="in"><input id="icFee" type="number" min="0" max="50" step="0.5" value="8"><span>% do crédito</span></div></div>
+      </div><div class="res" id="icRes"></div></div>`;
+    calcIcms();
+  }
+  function calcIcms() {
+    const s = +($("icSaldo")?.value || 0), d = +($("icDesc")?.value || 0) / 100, f = +($("icFee")?.value || 0) / 100;
+    const caixa = s * (1 - d), econ = s * d, fee = s * f;
+    $("icRes").innerHTML = `<div class="big"><span class="v">${R$(caixa)}</span><span class="l">de dinheiro liberado para a empresa vendendo o crédito</span></div>
+      <dl><dt>Economia de quem compra o crédito</dt><dd>${R$(econ)}</dd><dt>Honorário de quem estrutura</dt><dd>${R$(fee)}</dd><dt>Crédito parado hoje</dt><dd>${R$(s)}</dd></dl>`;
+  }
+  $("icUF").addEventListener("input", renderIcms);
+  $("v-icms").addEventListener("input", e => { if (/^ic(Saldo|Desc|Fee)$/.test(e.target.id)) calcIcms(); });
+  $("v-icms").addEventListener("click", e => {
+    const b = e.target.closest("[data-nicho]"); if (!b) return;
+    const n = NICHOS.find(x => x.id === b.dataset.nicho), uf = $("icUF").value;
+    const lista = ALL.filter(p => p.devedor && p.situacao === "ativo" && (!uf || p.uf === uf) && n.kw.test(p.devedor)).slice(0, 60);
+    const art = b.closest(".nicho"); let box = art.querySelector(".rjlist");
+    if (box) { box.remove(); return; }
+    box = document.createElement("div"); box.className = "rjlist";
+    box.innerHTML = lista.map(p => `<button type="button" class="monp" data-id="${esc(p.id)}"><b>${esc(CL[p.classe] || p.classe)}</b> · ${esc(p.uf || "")} · ${fmtData(p.data_ajuizamento)}<span class="nm">${nomeDe(p)}</span></button>`).join("");
+    art.appendChild(box);
+  });
+  $("v-icms").addEventListener("click", e => { const b = e.target.closest(".monp[data-id]"); if (b) { const p = ALL.find(x => x.id === b.dataset.id); if (p) openDetail(p); } });
 
   const API = window.CRISE_API;
   async function carregar() {
@@ -550,7 +936,7 @@ button,select,input{font:inherit;color:inherit}
     $("fUF").innerHTML = `<option value="">Todos os estados</option>` + ufs.map(u => `<option>${u}</option>`).join("");
     const ident = ALL.filter(p => p.devedor).length;
     $("msg").innerHTML = `<div class="source">Fontes: <b>DataJud (CNJ)</b> e <b>Diário de Justiça Eletrônico Nacional</b>, atualizado em ${fmtData(atualizado)}. ${ALL.length.toLocaleString("pt-BR")} processos dos últimos 18 meses; ${ident.toLocaleString("pt-BR")} já com a empresa identificada (a identificação avança a cada hora).</div>`;
-    kpis(); chart(); render(); ganhoComDados();
+    kpis(); chart(); render(); ganhoComDados(); mostrarView(location.hash.slice(1));
   }).catch(e => { $("msg").innerHTML = `<div class="notice error"><span><strong>Não foi possível carregar.</strong> ${esc(e.message)}</span></div>`; });
 })();
 
