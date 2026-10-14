@@ -160,6 +160,39 @@ button,select,input{font:inherit;color:inherit}
 .para ul{margin:0;padding-left:18px}
 .anon{color:var(--muted);font-style:italic}
 @media (max-width:700px){.bars{height:110px;gap:3px}.bars .tot{display:none}}
+
+/* Simulador de ganho */
+.ganho{border:1px solid var(--line);border-radius:var(--r);background:var(--surface);padding:18px;margin:0 0 18px;display:grid;gap:14px}
+.ghead{display:grid;gap:4px;max-width:68ch}
+.ghead h2{font-family:var(--display);font-size:24px;font-stretch:90%;font-weight:700;margin:0;text-wrap:balance;line-height:1.15}
+.ghead p{margin:0;color:var(--muted);font-size:14px}
+.tabs{display:flex;flex-wrap:wrap;gap:6px}
+.tabs button{font:inherit;font-size:14px;font-weight:500;padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:var(--sunk);color:var(--ink);cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.tabs button:focus-visible,.sim input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.gbody{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:18px;align-items:start}
+.sim{display:grid;gap:12px}
+.sim .fld{display:grid;gap:4px}
+.sim label{font-size:13px;font-weight:600}
+.sim .in{display:flex;align-items:center;border:1px solid var(--line);border-radius:8px;background:var(--bg);overflow:hidden}
+.sim .in span{padding:0 10px;color:var(--muted);font-size:13px;font-family:var(--mono);white-space:nowrap}
+.sim input{flex:1;min-width:0;border:0;background:transparent;color:var(--ink);font:500 15px var(--mono);padding:9px 10px;font-variant-numeric:tabular-nums}
+.sim .ajuda{font-size:12px;color:var(--muted)}
+.res{display:grid;gap:12px;background:var(--good-soft);border:1px solid color-mix(in srgb,var(--good) 30%,transparent);border-radius:var(--r);padding:16px}
+.res .big{display:grid;gap:2px}
+.res .big .v{font-family:var(--display);font-size:clamp(30px,7vw,42px);font-weight:800;font-stretch:88%;color:var(--good);line-height:1.05;font-variant-numeric:tabular-nums}
+.res .big .l{font-size:13px;color:var(--ink)}
+.res .big.neg .v{color:var(--accent)}
+.res dl{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 12px;margin:0;font-size:14px}
+.res dt{color:var(--muted)}
+.res dd{margin:0;text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;font-weight:500}
+.res .barra{display:grid;gap:4px;font-size:12px;color:var(--muted)}
+.res .trilho{height:10px;border-radius:5px;background:var(--surface);overflow:hidden;display:flex}
+.res .trilho i{display:block;height:100%}
+.res .nota{font-size:13px;color:var(--ink);margin:0;border-top:1px solid color-mix(in srgb,var(--good) 25%,transparent);padding-top:10px}
+.agora{margin:0;font-size:14px;background:var(--accent-soft);border-radius:8px;padding:10px 14px}
+.agora b{font-variant-numeric:tabular-nums}
+@media (max-width:720px){.gbody{grid-template-columns:minmax(0,1fr)}.ghead h2{font-size:21px}}
 </style></head><body><script>window.CRISE_API = { url: "https://ryhyvzwqtktaaonznizn.supabase.co/rest/v1/crise_processos?select=id,tribunal,uf,numero,numero_fmt,classe,vara,data_ajuizamento,ultimo_mov_data,situacao,devedor,devedor_tipo,cnpj,agro,n_pub,ultima_pub_data,ultima_pub_tipo,eventos,link,visto_ultimo&situacao=neq.cancelado&order=data_ajuizamento.desc", key: "sb_publishable_Ji31DC1ihqZTR7gmLeYTLw_GHgBjWN0" };</script><div class="wrap" id="app">
   <header class="top">
     <div class="brand">
@@ -180,6 +213,24 @@ button,select,input{font:inherit;color:inherit}
     <p class="sub" id="chartSub">Processos distribuídos nos últimos 12 meses</p>
     <div class="bars" id="bars"></div>
     <div class="legend"><span><i style="background:var(--accent)"></i>Recuperação judicial</span><span><i style="background:var(--mid)"></i>Falência</span><span><i style="background:var(--low)"></i>Recuperação extrajudicial</span></div>
+  </section>
+
+  <section class="ganho" id="ganho" aria-labelledby="ganhoT">
+    <div class="ghead">
+      <span class="eyebrow">O ganho em reais</span>
+      <h2 id="ganhoT">Quanto dá para ganhar com um caso do radar</h2>
+      <p>Escolha o seu perfil e veja a conta de uma operação típica. Os campos já vêm com valores comuns de mercado. Troque pelos números do seu caso.</p>
+    </div>
+    <div class="tabs" role="tablist" aria-label="Perfil" id="gTabs">
+      <button type="button" role="tab" id="tab-creditos" data-p="creditos" aria-selected="true">Compro créditos</button>
+      <button type="button" role="tab" id="tab-ativos" data-p="ativos" aria-selected="false">Compro imóveis e ativos</button>
+      <button type="button" role="tab" id="tab-servicos" data-p="servicos" aria-selected="false">Presto serviço</button>
+    </div>
+    <div class="gbody">
+      <form class="sim" id="sim" autocomplete="off"></form>
+      <div class="res" id="res" aria-live="polite"></div>
+    </div>
+    <p class="agora" id="agora"></p>
   </section>
 
   <div class="main">
@@ -357,6 +408,7 @@ button,select,input{font:inherit;color:inherit}
       <div class="para"><h3>Para quem é oportunidade</h3><ul>${(PARA[p.classe] || PARA.RJ).map(t => `<li>${t}</li>`).join("")}</ul></div>
       <div class="pactions">
         ${p.link && /^https?:\/\//.test(p.link) ? `<a class="btn primary" href="${esc(p.link)}" target="_blank" rel="noopener">Abrir no tribunal</a>` : ""}
+        <button class="btn" type="button" data-sim="${evs.includes("venda_ativos") || evs.includes("falencia_decretada") || p.classe === "Falência" ? "ativos" : "creditos"}">Simular o ganho</button>
         <button class="btn" type="button" id="copy">Copiar resumo</button>
       </div>
     </aside>`;
@@ -378,6 +430,107 @@ button,select,input{font:inherit;color:inherit}
   $("rows").addEventListener("click", e => { const b = e.target.closest(".row"); if (b) openDetail(ALL[+b.dataset.i]); });
   document.addEventListener("keydown", e => { if (e.key === "Escape" && !$("detail").hidden) closeDetail(); });
 
+  // ---------- Simulador de ganho ----------
+  const R$ = v => (isFinite(v) ? v : 0).toLocaleString("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 });
+  const pct = v => isFinite(v) ? (v * 100).toLocaleString("pt-BR", { maximumFractionDigits: 1 }) + "%" : "–";
+  function tir(fluxos) {
+    const vpl = r => fluxos.reduce((s, f, t) => s + f / Math.pow(1 + r, t), 0);
+    let lo = -0.99, hi = 10;
+    if (vpl(lo) * vpl(hi) > 0) return NaN;
+    for (let k = 0; k < 100; k++) { const m = (lo + hi) / 2; if (vpl(lo) * vpl(m) <= 0) hi = m; else lo = m; }
+    return (lo + hi) / 2;
+  }
+  const PERFIS = {
+    creditos: {
+      campos: [
+        ["face", "Valor do crédito que o credor tem a receber", "R$", "", 500000, 10000],
+        ["preco", "Quanto você paga pelo crédito", "", "% do valor", 15, 1, "Credores que precisam de caixa costumam vender bem abaixo do valor."],
+        ["plano", "Quanto o plano de recuperação paga", "", "% do valor", 40, 1, "É comum o plano pagar só parte da dívida, com desconto."],
+        ["anos", "Prazo de pagamento do plano", "", "anos", 5, 1]
+      ],
+      calc: v => {
+        const pago = v.face * v.preco / 100, recebe = v.face * v.plano / 100, n = Math.max(1, Math.round(v.anos));
+        const r = tir([-pago, ...Array(n).fill(recebe / n)]);
+        return {
+          big: recebe - pago, bigL: "de lucro estimado ao fim do plano",
+          linhas: [["Você paga hoje", R$(pago)], ["Você recebe ao longo do plano", R$(recebe)], ["Cada R$ 1 investido vira", "R$ " + (recebe / pago).toLocaleString("pt-BR", { maximumFractionDigits: 2 })], ["Retorno ao ano (TIR)", pct(r)]],
+          barra: [["Você paga", pago, "var(--accent)"], ["Lucro", Math.max(0, recebe - pago), "var(--good)"]],
+          nota: "Onde o radar entra: o edital com a lista de credores mostra quem tem a receber e quanto. É a lista de quem pode vender o crédito para você. Filtre por <b>Edital com lista de credores</b>."
+        };
+      }
+    },
+    ativos: {
+      campos: [
+        ["aval", "Valor de avaliação do bem", "R$", "", 2000000, 10000],
+        ["lance", "Seu lance no leilão", "", "% da avaliação", 60, 1, "Na falência, a 2ª chamada aceita lance a partir de 50% da avaliação e a 3ª, qualquer valor."],
+        ["custos", "Custos da compra", "", "% do lance", 10, 0.5, "Comissão do leiloeiro (5%), ITBI, registro e regularização."],
+        ["venda", "Valor de revenda", "", "% da avaliação", 90, 1]
+      ],
+      calc: v => {
+        const lance = v.aval * v.lance / 100, custos = lance * v.custos / 100, venda = v.aval * v.venda / 100, inv = lance + custos;
+        return {
+          big: venda - inv, bigL: "de ganho bruto na revenda",
+          linhas: [["Lance", R$(lance)], ["Custos da compra", R$(custos)], ["Revenda", R$(venda)], ["Retorno sobre o investido", pct((venda - inv) / inv)]],
+          barra: [["Lance + custos", inv, "var(--accent)"], ["Ganho", Math.max(0, venda - inv), "var(--good)"]],
+          nota: "Bens vendidos na falência ou como unidade produtiva isolada (UPI) na recuperação saem sem as dívidas da empresa. Onde o radar entra: filtre por <b>Venda de ativos ou leilão</b> e por <b>Falência decretada</b> para chegar antes da concorrência."
+        };
+      }
+    },
+    servicos: {
+      campos: [
+        ["casos", "Casos novos por mês no Brasil", "", "casos", 250, 1, "Média real dos últimos 3 meses no radar."],
+        ["conv", "Quantos viram clientes", "", "%", 2, 0.5],
+        ["ticket", "Honorário médio por caso", "R$", "", 40000, 1000, "Advogado, consultoria, administrador judicial (até 5% dos créditos), leiloeiro (5% da venda)."]
+      ],
+      calc: v => {
+        const cli = v.casos * v.conv / 100, mes = cli * v.ticket;
+        return {
+          big: mes * 12, bigL: "de faturamento novo por ano",
+          linhas: [["Clientes novos por mês", cli.toLocaleString("pt-BR", { maximumFractionDigits: 1 })], ["Faturamento por mês", R$(mes)], ["Clientes novos por ano", Math.round(cli * 12).toLocaleString("pt-BR")]],
+          barra: null,
+          nota: "Onde o radar entra: você fica sabendo do pedido no dia, com nome, CNPJ, vara e estado, antes de o caso virar notícia. Use o filtro de estado para ver só a sua região."
+        };
+      }
+    }
+  };
+  const VAL = {};
+  let perfil = "creditos";
+  function desenhaForm() {
+    const P = PERFIS[perfil];
+    VAL[perfil] = VAL[perfil] || Object.fromEntries(P.campos.map(c => [c[0], c[4]]));
+    $("sim").innerHTML = P.campos.map(([id, l, pre, suf, , step, aj]) => `<div class="fld"><label for="g-${perfil}-${id}">${l}</label>
+      <div class="in">${pre ? `<span>${pre}</span>` : ""}<input id="g-${perfil}-${id}" data-k="${id}" type="number" inputmode="decimal" min="0" step="${step}" value="${VAL[perfil][id]}">${suf ? `<span>${suf}</span>` : ""}</div>
+      ${aj ? `<span class="ajuda">${aj}</span>` : ""}</div>`).join("");
+    document.querySelectorAll("#gTabs button").forEach(b => b.setAttribute("aria-selected", b.dataset.p === perfil));
+    calcula();
+  }
+  function calcula() {
+    const o = PERFIS[perfil].calc(VAL[perfil]);
+    const tot = o.barra ? o.barra.reduce((s, b) => s + b[1], 0) : 0;
+    $("res").innerHTML = `<div class="big${o.big < 0 ? " neg" : ""}"><span class="v">${R$(o.big)}</span><span class="l">${o.big < 0 ? "de prejuízo com esses números" : o.bigL}</span></div>
+      ${o.barra && tot > 0 ? `<div class="barra"><div class="trilho">${o.barra.map(b => `<i style="width:${b[1] / tot * 100}%;background:${b[2]}"></i>`).join("")}</div><span>${o.barra.map(b => `${b[0]} ${R$(b[1])}`).join(" · ")}</span></div>` : ""}
+      <dl>${o.linhas.map(([k, x]) => `<dt>${k}</dt><dd>${x}</dd>`).join("")}</dl>
+      <p class="nota">${o.nota}</p>`;
+  }
+  $("gTabs").addEventListener("click", e => { const b = e.target.closest("button"); if (b) { perfil = b.dataset.p; desenhaForm(); } });
+  $("sim").addEventListener("input", e => { const k = e.target.dataset.k; if (!k) return; const n = parseFloat(e.target.value); VAL[perfil][k] = isFinite(n) ? n : 0; calcula(); });
+  $("sim").addEventListener("submit", e => e.preventDefault());
+  function ganhoComDados() {
+    const base = ALL.filter(p => p.situacao === "ativo");
+    const hoje = new Date(); let n = 0;
+    for (let k = 1; k <= 3; k++) { const ini = new Date(hoje.getFullYear(), hoje.getMonth() - k, 1), fim = new Date(hoje.getFullYear(), hoje.getMonth() - k + 1, 1); n += base.filter(p => { const d = new Date(p.data_ajuizamento); return d >= ini && d < fim; }).length; }
+    const media = Math.round(n / 3);
+    if (media > 0) { PERFIS.servicos.campos[0][4] = media; if (VAL.servicos) VAL.servicos.casos = media; if (perfil === "servicos") desenhaForm(); }
+    const ed = base.filter(p => (p.eventos || []).includes("edital_credores")).length, va = base.filter(p => (p.eventos || []).includes("venda_ativos")).length;
+    $("agora").innerHTML = `<b>No radar agora:</b> <b>${ed.toLocaleString("pt-BR")}</b> processos com lista de credores publicada, <b>${va.toLocaleString("pt-BR")}</b> com venda de ativos ou leilão e cerca de <b>${media.toLocaleString("pt-BR")}</b> pedidos novos por mês. Números da simulação são estimativas para conversa comercial, não promessa de retorno.`;
+  }
+  desenhaForm();
+  document.addEventListener("click", e => {
+    const b = e.target.closest("[data-sim]"); if (!b) return;
+    perfil = b.dataset.sim; closeDetail(); desenhaForm();
+    $("ganho").scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
+  });
+
   const API = window.CRISE_API;
   async function carregar() {
     const rows = [];
@@ -397,7 +550,7 @@ button,select,input{font:inherit;color:inherit}
     $("fUF").innerHTML = `<option value="">Todos os estados</option>` + ufs.map(u => `<option>${u}</option>`).join("");
     const ident = ALL.filter(p => p.devedor).length;
     $("msg").innerHTML = `<div class="source">Fontes: <b>DataJud (CNJ)</b> e <b>Diário de Justiça Eletrônico Nacional</b>, atualizado em ${fmtData(atualizado)}. ${ALL.length.toLocaleString("pt-BR")} processos dos últimos 18 meses; ${ident.toLocaleString("pt-BR")} já com a empresa identificada (a identificação avança a cada hora).</div>`;
-    kpis(); chart(); render();
+    kpis(); chart(); render(); ganhoComDados();
   }).catch(e => { $("msg").innerHTML = `<div class="notice error"><span><strong>Não foi possível carregar.</strong> ${esc(e.message)}</span></div>`; });
 })();
 
