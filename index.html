@@ -1,0 +1,404 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><meta name="description" content="Pedidos de recuperação judicial e falência em todo o Brasil, atualizados todo dia, com a empresa identificada e os marcos do processo."><title>Radar Crise</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"><style>
+/* Layout: barra de ferramentas + resumo; abaixo, filtros à esquerda e ranking à direita; detalhe em painel lateral (tela cheia no celular) */
+:root{
+  --bg:#F4F3F1; --surface:#FFFFFF; --sunk:#ECEAE6; --ink:#1C1A17; --muted:#625D56; --line:#DCD8D2;
+  --accent:#A33A1E; --accent-ink:#FFFFFF; --accent-soft:#F8E6E0;
+  --good:#16794F; --good-soft:#DDF1E7; --mid:#A86B00; --mid-soft:#FBEFD6; --low:#6B7672; --low-soft:#E6EAE8;
+  --display:"Archivo","Arial Narrow",system-ui,sans-serif;
+  --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  --r:10px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#141210; --surface:#1C1916; --sunk:#24201C; --ink:#EDE8E2; --muted:#A39B91; --line:#352F29;
+  --accent:#F0957A; --accent-ink:#1A0F0B; --accent-soft:#3A1E16;
+  --good:#5DD39E; --good-soft:#143428; --mid:#F2B84B; --mid-soft:#3A2D12; --low:#94A49F; --low-soft:#232E2B; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141210; --surface:#1C1916; --sunk:#24201C; --ink:#EDE8E2; --muted:#A39B91; --line:#352F29;
+  --accent:#F0957A; --accent-ink:#1A0F0B; --accent-soft:#3A1E16;
+  --good:#5DD39E; --good-soft:#143428; --mid:#F2B84B; --mid-soft:#3A2D12; --low:#94A49F; --low-soft:#232E2B; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5}
+.wrap{max-width:1240px;margin:0 auto;padding-inline:16px;padding-block:20px 48px;display:grid;gap:18px}
+.num,.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+h1,h2,h3{font-family:var(--display);font-stretch:85%;margin:0;text-wrap:balance;letter-spacing:-.01em}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+button,select,input{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* topo */
+.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:14px}
+.brand h1{font-size:clamp(28px,4.4vw,40px);font-weight:800;line-height:1}
+.brand p{margin:6px 0 0;color:var(--muted);max-width:60ch}
+.actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--surface);padding:9px 14px;border-radius:8px;cursor:pointer;font-weight:500;text-decoration:none;color:var(--ink)}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.primary:hover{filter:brightness(1.08)}
+.source{font-size:13px;color:var(--muted)}
+.source b{color:var(--ink);font-weight:600}
+
+.notice{display:flex;gap:10px;align-items:flex-start;background:var(--mid-soft);border:1px solid color-mix(in srgb,var(--mid) 35%,transparent);padding:10px 14px;border-radius:var(--r);font-size:14px}
+.notice strong{color:var(--mid)}
+.error{background:var(--low-soft);border-color:var(--line)}
+.drop{border:1.5px dashed var(--accent);background:var(--accent-soft)}
+
+/* resumo */
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+.kpi{padding:14px 16px;border-left:1px solid var(--line);display:grid;gap:2px}
+.kpi:first-child{border-left:0}
+.kpi .v{font-family:var(--display);font-size:30px;font-weight:700;font-stretch:90%;font-variant-numeric:tabular-nums;line-height:1.1}
+.kpi .l{font-size:13px;color:var(--muted)}
+@media (max-width:760px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.kpi:nth-child(3){border-left:0}.kpi:nth-child(n+3){border-top:1px solid var(--line)}}
+
+/* corpo */
+.main{display:grid;grid-template-columns:260px minmax(0,1fr);gap:18px;align-items:start}
+@media (max-width:900px){.main{grid-template-columns:minmax(0,1fr)}}
+.filters{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;display:grid;gap:14px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 12px)}
+@media (max-width:900px){.filters{position:static}}
+.f{display:grid;gap:6px}
+.f label{font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.f select,.f input[type=number]{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg)}
+.f input[type=range]{width:100%;accent-color:var(--accent)}
+.rangeval{font-family:var(--mono);font-size:13px}
+.check{display:flex;gap:8px;align-items:center;font-size:14px;cursor:pointer}
+.check input{accent-color:var(--accent);width:16px;height:16px}
+.reset{background:none;border:0;color:var(--accent);cursor:pointer;padding:0;justify-self:start;font-size:14px}
+
+.listhead{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:10px}
+.listhead h2{font-size:22px;font-weight:700}
+.listhead .count{color:var(--muted);font-size:14px}
+.sort{display:flex;gap:6px;align-items:center;font-size:14px;color:var(--muted)}
+.sort select{padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+
+.rows{display:grid;gap:8px}
+.row{display:grid;grid-template-columns:56px minmax(0,1fr) auto;gap:14px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;cursor:pointer;text-align:left;width:100%}
+.row:hover{border-color:var(--accent)}
+.badge{width:56px;height:56px;border-radius:50%;display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:21px;font-stretch:85%;font-variant-numeric:tabular-nums}
+.s-good{background:var(--good-soft);color:var(--good)}
+.s-mid{background:var(--mid-soft);color:var(--mid)}
+.s-low{background:var(--low-soft);color:var(--low)}
+.rinfo{min-width:0;display:grid;gap:3px}
+.rtitle{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rmeta{font-size:13px;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 10px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:12px;padding:2px 8px;border-radius:99px;background:var(--sunk);color:var(--muted);white-space:nowrap}
+.chip.fin{background:var(--good-soft);color:var(--good)}
+.chip.warn{background:var(--mid-soft);color:var(--mid)}
+.rprice{text-align:right;display:grid;gap:2px}
+.rprice .p{font-family:var(--mono);font-weight:500;font-size:15px}
+.rprice .d{font-size:13px;color:var(--good);font-weight:600}
+.rprice .a{font-size:12px;color:var(--muted);text-decoration:line-through}
+@media (max-width:560px){.row{grid-template-columns:48px minmax(0,1fr)}.badge{width:48px;height:48px;font-size:18px}.rprice{grid-column:2;text-align:left;display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}}
+.more{justify-self:center;margin-top:6px}
+.empty{padding:32px;text-align:center;color:var(--muted);background:var(--surface);border:1px dashed var(--line);border-radius:var(--r)}
+
+/* detalhe */
+.scrim{position:fixed;inset:0;background:color-mix(in srgb,var(--ink) 40%,transparent);z-index:20}
+.panel{position:fixed;top:0;right:0;bottom:0;width:min(520px,100%);background:var(--surface);z-index:21;overflow-y:auto;border-left:1px solid var(--line);padding:calc(env(safe-area-inset-top,0px) + 18px) 20px calc(env(safe-area-inset-bottom,0px) + 28px);display:grid;gap:18px;align-content:start}
+.ptop{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.close{border:1px solid var(--line);background:var(--bg);border-radius:8px;width:36px;height:36px;cursor:pointer;font-size:18px;flex:none}
+.panel h2{font-size:24px;line-height:1.15}
+.addr{color:var(--muted);font-size:14px;margin-top:4px}
+.scorebox{display:grid;grid-template-columns:auto minmax(0,1fr);gap:16px;align-items:center;background:var(--bg);border-radius:var(--r);padding:14px}
+.big{width:84px;height:84px;font-size:32px}
+.bars{display:grid;gap:9px}
+.bar{display:grid;gap:3px}
+.bar .t{display:flex;justify-content:space-between;gap:8px;font-size:13px}
+.bar .t span:last-child{font-family:var(--mono);color:var(--muted)}
+.track{height:6px;background:var(--sunk);border-radius:99px;overflow:hidden}
+.fill{height:100%;background:var(--accent);border-radius:99px}
+.bar .n{font-size:12px;color:var(--muted)}
+.facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.fact{background:var(--surface);padding:10px 12px;display:grid;gap:2px}
+.fact .k{font-size:12px;color:var(--muted)}
+.fact .v{font-family:var(--mono);font-weight:500}
+.desc{font-size:14px;color:var(--muted);background:var(--bg);padding:10px 12px;border-radius:8px}
+.todo h3{font-size:17px;margin-bottom:8px}
+.todo ul{margin:0;padding:0;list-style:none;display:grid;gap:8px}
+.todo li{display:flex;gap:10px;font-size:14px}
+.todo li::before{content:"";flex:none;width:14px;height:14px;margin-top:3px;border:1.5px solid var(--muted);border-radius:3px}
+.pactions{display:flex;flex-wrap:wrap;gap:8px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom,0px) + 20px);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:8px;z-index:30;font-size:14px}
+.copyarea{width:100%;min-height:150px;font-family:var(--mono);font-size:12px;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--bg)}
+
+.paises{display:flex;flex-wrap:wrap;gap:8px}
+.pais{display:inline-flex;align-items:center;gap:10px;border:1.5px solid var(--line);background:var(--surface);border-radius:10px;padding:10px 16px;cursor:pointer;font-weight:600;color:var(--ink)}
+.pais small{font-family:var(--mono);font-weight:500;font-size:12px;color:var(--muted)}
+.pais[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.pais:hover{border-color:var(--accent)}
+@media (max-width:600px){.pais{padding:8px 12px;font-size:14px;gap:8px}}
+.fx{font-size:12px;color:var(--muted);font-family:var(--mono)}
+.conv{font-size:12px;color:var(--muted);font-family:var(--mono)}
+.prox{font-size:13px;color:var(--good);font-weight:600}
+.alerta{font-size:13px;background:var(--mid-soft);color:var(--ink);padding:8px 10px;border-radius:8px}
+.foot{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:14px;display:grid;gap:6px;max-width:80ch}
+@media (prefers-reduced-motion:no-preference){.panel{animation:slide .18s ease-out}@keyframes slide{from{transform:translateX(24px);opacity:.6}}}
+
+.chart{border:1px solid var(--line);border-radius:var(--r);background:var(--surface);padding:16px;margin:0 0 18px}
+.chart h2{font-size:15px;margin:0 0 4px}
+.chart .sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.bars{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:6px;align-items:end;height:150px}
+.bars .col{display:flex;flex-direction:column;justify-content:flex-end;gap:2px;height:100%;position:relative}
+.bars .seg{border-radius:3px 3px 0 0;min-height:1px}
+.bars .seg.rj{background:var(--accent)}
+.bars .seg.fa{background:var(--mid)}
+.bars .seg.ex{background:var(--low)}
+.bars .lbl{font-family:var(--mono);font-size:11px;color:var(--muted);text-align:center;margin-top:4px}
+.bars .tot{font-family:var(--mono);font-size:11px;text-align:center;color:var(--ink)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:8px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+.search{width:100%}
+.cls{font-family:var(--mono);font-size:12px;font-weight:600;border-radius:6px;padding:2px 7px;background:var(--accent-soft);color:var(--accent)}
+.cls.fa{background:var(--mid-soft);color:var(--mid)}
+.cls.ex{background:var(--low-soft);color:var(--low)}
+.timeline{list-style:none;padding:0;margin:8px 0 0}
+.timeline li{padding:6px 0 6px 18px;border-left:2px solid var(--line);position:relative;font-size:14px}
+.timeline li::before{content:"";position:absolute;left:-6px;top:11px;width:10px;height:10px;border-radius:50%;background:var(--accent)}
+.para{border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;background:var(--surface);margin-top:12px}
+.para h3{margin:0 0 6px;font-size:15px}
+.para ul{margin:0;padding-left:18px}
+.anon{color:var(--muted);font-style:italic}
+@media (max-width:700px){.bars{height:110px;gap:3px}.bars .tot{display:none}}
+</style></head><body><script>window.CRISE_API = { url: "https://ryhyvzwqtktaaonznizn.supabase.co/rest/v1/crise_processos?select=id,tribunal,uf,numero,numero_fmt,classe,vara,data_ajuizamento,ultimo_mov_data,situacao,devedor,devedor_tipo,cnpj,agro,n_pub,ultima_pub_data,ultima_pub_tipo,eventos,link,visto_ultimo&situacao=neq.cancelado&order=data_ajuizamento.desc", key: "sb_publishable_Ji31DC1ihqZTR7gmLeYTLw_GHgBjWN0" };</script><div class="wrap" id="app">
+  <header class="top">
+    <div class="brand">
+      <span class="eyebrow">Recuperações judiciais e falências no Brasil</span>
+      <h1>Radar Crise</h1>
+      <p>Acompanha todo dia os pedidos de recuperação judicial, recuperação extrajudicial e falência nos 27 tribunais estaduais, identifica a empresa e marca os momentos que geram oportunidade: deferimento, lista de credores, assembleia, venda de ativos e falência decretada.</p>
+    </div>
+    <div class="actions">
+      <a class="btn primary" id="btnTestar" href="#" target="_blank" rel="noopener">Quero testar</a>
+    </div>
+  </header>
+
+  <div id="msg"></div>
+  <section class="kpis" id="kpis" aria-label="Resumo"></section>
+
+  <section class="chart" aria-label="Pedidos por mês">
+    <h2>Pedidos por mês</h2>
+    <p class="sub" id="chartSub">Processos distribuídos nos últimos 12 meses</p>
+    <div class="bars" id="bars"></div>
+    <div class="legend"><span><i style="background:var(--accent)"></i>Recuperação judicial</span><span><i style="background:var(--mid)"></i>Falência</span><span><i style="background:var(--low)"></i>Recuperação extrajudicial</span></div>
+  </section>
+
+  <div class="main">
+    <aside class="filters" aria-label="Filtros">
+      <div class="f"><label for="fBusca">Buscar empresa ou CNPJ</label><input type="search" id="fBusca" class="search" placeholder="Nome ou CNPJ"></div>
+      <div class="f"><label for="fClasse">Tipo de processo</label><select id="fClasse">
+        <option value="">Todos</option><option value="RJ">Recuperação judicial</option><option value="Falência">Falência</option><option value="Extrajudicial">Recuperação extrajudicial</option></select></div>
+      <div class="f"><label for="fUF">Estado</label><select id="fUF"></select></div>
+      <div class="f"><label for="fPeriodo">Distribuído nos últimos</label><select id="fPeriodo">
+        <option value="7">7 dias</option><option value="30">30 dias</option><option value="90" selected>90 dias</option><option value="365">12 meses</option><option value="0">Todo o período</option></select></div>
+      <div class="f"><label for="fEvento">Momento do processo</label><select id="fEvento">
+        <option value="">Qualquer</option><option value="deferido">Processamento deferido</option><option value="edital_credores">Edital com lista de credores</option>
+        <option value="agc">Assembleia de credores</option><option value="concedida">Plano aprovado / RJ concedida</option><option value="venda_ativos">Venda de ativos ou leilão</option>
+        <option value="falencia_decretada">Falência decretada</option></select></div>
+      <label class="check"><input type="checkbox" id="fPJ" checked> Só empresas identificadas</label>
+      <label class="check"><input type="checkbox" id="fAgro"> Só agronegócio</label>
+      <label class="check"><input type="checkbox" id="fAtivos" checked> Esconder cancelados e extintos</label>
+      <button class="reset" id="reset" type="button">Limpar filtros</button>
+    </aside>
+
+    <section aria-label="Processos">
+      <div class="listhead">
+        <div><h2>Processos</h2><span class="count" id="count"></span></div>
+        <label class="sort" for="sort">Ordenar por
+          <select id="sort">
+            <option value="recentes">Mais recentes</option>
+            <option value="movimento">Última movimentação</option>
+            <option value="eventos">Mais avançados</option>
+          </select>
+        </label>
+      </div>
+      <div class="rows" id="rows"></div>
+      <button class="btn more" id="more" type="button" hidden>Mostrar mais</button>
+    </section>
+  </div>
+
+  <footer class="foot">
+    <span><b>De onde vêm os dados:</b> lista de processos da API pública do DataJud (CNJ) e publicações do Diário de Justiça Eletrônico Nacional (DJEN), atualizadas todo dia. O nome da empresa e os marcos do processo são lidos automaticamente das publicações e podem conter erros: confira sempre no tribunal.</span>
+    <span><b>Privacidade:</b> o Radar Crise mostra apenas empresas. Quando o devedor é pessoa física (por exemplo, produtor rural), o nome não é exibido.</span>
+    <span>Ferramenta de triagem. Não substitui a leitura dos autos nem a orientação de um advogado.</span>
+  </footer>
+</div>
+
+<div id="detail" hidden></div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+(function () {
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const fmtData = d => { const t = new Date(d); return isNaN(t) ? "–" : t.toLocaleDateString("pt-BR", { timeZone: "America/Sao_Paulo" }); };
+  const dias = d => (Date.now() - new Date(d).getTime()) / 864e5;
+  const WHATS = "5531984025879";
+  $("btnTestar").href = `https://wa.me/${WHATS}?text=${encodeURIComponent("Olá! Quero testar o Radar Crise (recuperações judiciais e falências).")}`;
+
+  const CL = { RJ: "Recuperação judicial", "Falência": "Pedido de falência", Extrajudicial: "Recuperação extrajudicial", "Autofalência": "Autofalência" };
+  const CLS = { RJ: "", "Falência": "fa", Extrajudicial: "ex", "Autofalência": "fa" };
+  const EV = {
+    deferido: "Processamento deferido", edital_credores: "Edital com lista de credores", agc: "Assembleia de credores",
+    plano: "Plano de recuperação", concedida: "Plano aprovado / RJ concedida", venda_ativos: "Venda de ativos ou leilão",
+    falencia_decretada: "Falência decretada", encerramento: "Encerramento", indeferido: "Indeferido ou extinto"
+  };
+  const ORDEM_EV = ["deferido", "edital_credores", "plano", "agc", "concedida", "venda_ativos", "falencia_decretada", "encerramento", "indeferido"];
+  const nomeDe = p => p.devedor ? esc(p.devedor) : p.devedor_tipo === "PF" ? '<span class="anon">Pessoa física (nome não exibido)</span>' : '<span class="anon">Empresa em identificação</span>';
+
+  let ALL = [], shown = 30, atualizado = "";
+
+  function filtered() {
+    const b = $("fBusca").value.trim().toLowerCase(), cl = $("fClasse").value, uf = $("fUF").value, per = +$("fPeriodo").value, ev = $("fEvento").value;
+    const pj = $("fPJ").checked, agro = $("fAgro").checked, at = $("fAtivos").checked;
+    const bd = b.replace(/\D/g, "");
+    const r = ALL.filter(p => (!cl || p.classe === cl) && (!uf || p.uf === uf) && (!per || dias(p.data_ajuizamento) <= per) &&
+      (!ev || (p.eventos || []).includes(ev)) && (!pj || p.devedor) && (!agro || p.agro) && (!at || p.situacao === "ativo") &&
+      (!b || (p.devedor || "").toLowerCase().includes(b) || (bd.length >= 8 && (p.cnpj || "").replace(/\D/g, "").includes(bd)) || p.numero.includes(bd || "§")));
+    const by = {
+      recentes: (a, b) => (b.data_ajuizamento || "").localeCompare(a.data_ajuizamento || ""),
+      movimento: (a, b) => (b.ultima_pub_data || b.ultimo_mov_data || "").localeCompare(a.ultima_pub_data || a.ultimo_mov_data || ""),
+      eventos: (a, b) => (b.eventos || []).length - (a.eventos || []).length
+    }[$("sort").value];
+    return r.sort(by);
+  }
+
+  function kpis() {
+    const base = ALL.filter(p => p.situacao === "ativo");
+    const em = (cl, d) => base.filter(p => p.classe === cl && dias(p.data_ajuizamento) <= d).length;
+    $("kpis").innerHTML = [
+      [em("RJ", 30), "pedidos de recuperação judicial em 30 dias"],
+      [em("Falência", 30), "pedidos de falência em 30 dias"],
+      [base.filter(p => (p.eventos || []).includes("venda_ativos")).length, "processos com venda de ativos ou leilão"],
+      [base.filter(p => p.agro).length, "casos do agronegócio"]
+    ].map(([v, l]) => `<div class="kpi"><span class="v">${v.toLocaleString("pt-BR")}</span><span class="l">${l}</span></div>`).join("");
+  }
+
+  function chart() {
+    const uf = $("fUF").value;
+    const meses = [];
+    const hoje = new Date();
+    for (let k = 11; k >= 0; k--) { const d = new Date(hoje.getFullYear(), hoje.getMonth() - k, 1); meses.push({ y: d.getFullYear(), m: d.getMonth(), rj: 0, fa: 0, ex: 0 }); }
+    for (const p of ALL) {
+      if (p.situacao === "cancelado" || (uf && p.uf !== uf)) continue;
+      const d = new Date(p.data_ajuizamento);
+      const b = meses.find(x => x.y === d.getFullYear() && x.m === d.getMonth());
+      if (!b) continue;
+      if (p.classe === "RJ") b.rj++; else if (p.classe === "Extrajudicial") b.ex++; else b.fa++;
+    }
+    const max = Math.max(1, ...meses.map(b => b.rj + b.fa + b.ex));
+    const nomes = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"];
+    $("bars").innerHTML = meses.map(b => {
+      const tot = b.rj + b.fa + b.ex;
+      const h = v => (v / max * 100).toFixed(1) + "%";
+      return `<div class="col" title="${nomes[b.m]}/${b.y}: ${b.rj} RJ, ${b.fa} falência, ${b.ex} extrajudicial">
+        <span class="tot">${tot || ""}</span>
+        <div class="seg ex" style="height:${h(b.ex)}"></div><div class="seg fa" style="height:${h(b.fa)}"></div><div class="seg rj" style="height:${h(b.rj)}"></div>
+        <span class="lbl">${nomes[b.m]}</span></div>`;
+    }).join("");
+    $("chartSub").textContent = `Processos distribuídos nos últimos 12 meses${uf ? " em " + uf : " no Brasil"}. O mês atual ainda está em andamento.`;
+  }
+
+  function render() {
+    const r = filtered();
+    $("count").textContent = ` ${r.length.toLocaleString("pt-BR")} processos`;
+    $("rows").innerHTML = r.length ? r.slice(0, shown).map(rowHTML).join("") : `<div class="empty">Nenhum processo com esses filtros.</div>`;
+    $("more").hidden = r.length <= shown;
+  }
+
+  function rowHTML(p) {
+    const i = ALL.indexOf(p);
+    const evs = ORDEM_EV.filter(e => (p.eventos || []).includes(e));
+    const novo = dias(p.data_ajuizamento) <= 7;
+    const chips = [
+      novo ? '<span class="chip fin">Novo</span>' : "",
+      p.agro ? '<span class="chip">Agro</span>' : "",
+      ...evs.slice(-3).map(e => `<span class="chip${e === "falencia_decretada" ? " warn" : e === "venda_ativos" ? " fin" : ""}">${EV[e]}</span>`),
+      p.situacao !== "ativo" ? `<span class="chip warn">${esc(p.situacao)}</span>` : ""
+    ].join("");
+    return `<button class="row" data-i="${i}" type="button">
+      <span class="rinfo">
+        <span class="rtitle">${nomeDe(p)}</span>
+        <span class="rmeta"><span class="cls ${CLS[p.classe] || ""}">${CL[p.classe] || p.classe}</span> · ${esc(p.uf || "")} · ${esc(p.vara || p.tribunal)} · distribuído em ${fmtData(p.data_ajuizamento)}</span>
+        <span class="chips">${chips}</span>
+      </span>
+    </button>`;
+  }
+
+  const PARA = {
+    RJ: ["<b>Credores e advogados:</b> conferir a lista de credores do edital e habilitar ou divergir do crédito no prazo (em geral 15 dias após o edital).",
+      "<b>Compradores de ativos e fundos:</b> acompanhar o plano: vendas de UPI (unidades produtivas isoladas) saem livres de dívidas anteriores.",
+      "<b>Fornecedores:</b> rever limite de crédito e garantias com a empresa."],
+    "Falência": ["<b>Pedido de falência</b> não é falência decretada: muitos pedidos terminam em acordo ou pagamento (depósito elisivo).",
+      "<b>Se a falência for decretada:</b> credores habilitam créditos e os bens vão a leilão, oportunidade para compradores de ativos."],
+    Extrajudicial: ["<b>Recuperação extrajudicial</b> é um acordo negociado com parte dos credores e levado ao juiz para homologação.",
+      "<b>Credores atingidos</b> podem impugnar no prazo do edital."]
+  };
+
+  function openDetail(p) {
+    const d = $("detail");
+    const evs = ORDEM_EV.filter(e => (p.eventos || []).includes(e));
+    d.innerHTML = `<div class="scrim" data-close="1"></div>
+    <aside class="panel" role="dialog" aria-modal="true" aria-labelledby="dTitle">
+      <div class="ptop"><div><span class="eyebrow">${esc(CL[p.classe] || p.classe)} · ${esc(p.tribunal)}</span>
+        <h2 id="dTitle">${p.devedor ? esc(p.devedor) : p.devedor_tipo === "PF" ? "Pessoa física (nome não exibido)" : "Empresa em identificação"}</h2>
+        <div class="addr">Processo ${esc(p.numero_fmt || p.numero)}</div></div>
+        <button class="close" data-close="1" type="button" aria-label="Fechar">×</button></div>
+      <div class="facts">
+        <div class="fact"><span class="k">Distribuído em</span><span class="v">${fmtData(p.data_ajuizamento)}</span></div>
+        <div class="fact"><span class="k">Vara</span><span class="v">${esc(p.vara || "–")}</span></div>
+        <div class="fact"><span class="k">Estado</span><span class="v">${esc(p.uf || "–")}</span></div>
+        <div class="fact"><span class="k">CNPJ</span><span class="v">${esc(p.cnpj || "não encontrado nas publicações")}</span></div>
+        <div class="fact"><span class="k">Última publicação</span><span class="v">${p.ultima_pub_data ? fmtData(p.ultima_pub_data + "T12:00:00") : "–"}</span>${p.ultima_pub_tipo ? `<span class="conv">${esc(p.ultima_pub_tipo)}</span>` : ""}</div>
+        <div class="fact"><span class="k">Publicações lidas</span><span class="v">${p.n_pub ?? "–"}</span></div>
+        <div class="fact"><span class="k">Situação</span><span class="v">${esc(p.situacao)}</span></div>
+        <div class="fact"><span class="k">Setor</span><span class="v">${p.agro ? "Agronegócio" : "–"}</span></div>
+      </div>
+      <div class="para"><h3>Marcos identificados nas publicações</h3>${evs.length ? `<ul class="timeline">${evs.map(e => `<li>${EV[e]}</li>`).join("")}</ul>` : "<p>Nenhum marco identificado ainda. Pode ser um pedido recente.</p>"}</div>
+      <div class="para"><h3>Para quem é oportunidade</h3><ul>${(PARA[p.classe] || PARA.RJ).map(t => `<li>${t}</li>`).join("")}</ul></div>
+      <div class="pactions">
+        ${p.link && /^https?:\/\//.test(p.link) ? `<a class="btn primary" href="${esc(p.link)}" target="_blank" rel="noopener">Abrir no tribunal</a>` : ""}
+        <button class="btn" type="button" id="copy">Copiar resumo</button>
+      </div>
+    </aside>`;
+    d.hidden = false;
+    d.querySelector(".close").focus();
+    d.onclick = e => { if (e.target.dataset.close) closeDetail(); };
+    $("copy").onclick = () => {
+      const t = `*Radar Crise* · ${CL[p.classe]}\n${p.devedor || (p.devedor_tipo === "PF" ? "Pessoa física" : "Empresa em identificação")}${p.cnpj ? " · CNPJ " + p.cnpj : ""}\n${p.uf} · ${p.vara || p.tribunal} · distribuído em ${fmtData(p.data_ajuizamento)}\nProcesso ${p.numero_fmt || p.numero}${evs.length ? "\nMarcos: " + evs.map(e => EV[e]).join(", ") : ""}`;
+      try { navigator.clipboard.writeText(t).then(() => toast("Resumo copiado"), () => toast("Não foi possível copiar")); } catch (e) { toast("Não foi possível copiar"); }
+    };
+  }
+  function closeDetail() { $("detail").hidden = true; $("detail").innerHTML = ""; }
+  function toast(m) { const t = $("toast"); t.textContent = m; t.hidden = false; clearTimeout(toast.h); toast.h = setTimeout(() => t.hidden = true, 2200); }
+
+  ["fBusca", "fClasse", "fPeriodo", "fEvento", "fPJ", "fAgro", "fAtivos", "sort"].forEach(id => $(id).addEventListener("input", () => { shown = 30; render(); }));
+  $("fUF").addEventListener("input", () => { shown = 30; chart(); render(); });
+  $("reset").onclick = () => { $("fBusca").value = ""; $("fClasse").value = ""; $("fUF").value = ""; $("fPeriodo").value = "90"; $("fEvento").value = ""; $("fPJ").checked = true; $("fAgro").checked = false; $("fAtivos").checked = true; chart(); render(); };
+  $("more").onclick = () => { shown += 30; render(); };
+  $("rows").addEventListener("click", e => { const b = e.target.closest(".row"); if (b) openDetail(ALL[+b.dataset.i]); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape" && !$("detail").hidden) closeDetail(); });
+
+  const API = window.CRISE_API;
+  async function carregar() {
+    const rows = [];
+    for (let off = 0; off < 30000; off += 1000) {
+      const r = await fetch(`${API.url}&limit=1000&offset=${off}`, { headers: { apikey: API.key } });
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      const page = await r.json(); rows.push(...page);
+      if (page.length < 1000) break;
+    }
+    return rows;
+  }
+  $("msg").innerHTML = `<div class="notice"><span><strong>Carregando processos…</strong></span></div>`;
+  carregar().catch(() => fetch("dados.json").then(r => r.json()).then(j => j.rows)).then(rows => {
+    ALL = rows;
+    atualizado = rows.reduce((m, x) => x.visto_ultimo > m ? x.visto_ultimo : m, "");
+    const ufs = [...new Set(ALL.map(p => p.uf).filter(Boolean))].sort();
+    $("fUF").innerHTML = `<option value="">Todos os estados</option>` + ufs.map(u => `<option>${u}</option>`).join("");
+    const ident = ALL.filter(p => p.devedor).length;
+    $("msg").innerHTML = `<div class="source">Fontes: <b>DataJud (CNJ)</b> e <b>Diário de Justiça Eletrônico Nacional</b>, atualizado em ${fmtData(atualizado)}. ${ALL.length.toLocaleString("pt-BR")} processos dos últimos 18 meses; ${ident.toLocaleString("pt-BR")} já com a empresa identificada (a identificação avança a cada hora).</div>`;
+    kpis(); chart(); render();
+  }).catch(e => { $("msg").innerHTML = `<div class="notice error"><span><strong>Não foi possível carregar.</strong> ${esc(e.message)}</span></div>`; });
+})();
+
+</script></body></html>
