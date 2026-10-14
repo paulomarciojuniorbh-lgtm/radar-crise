@@ -26,10 +26,10 @@ def dv(base12):
     d1 = calc(base12, p1); d2 = calc(base12 + d1, [6] + p1)
     return base12 + d1 + d2
 
-def get(url, tries=4):
+def get(url, tries=2):
     for k in range(tries):
         try:
-            return urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=120)
+            return urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=40)
         except Exception as e:
             print("tentativa", k + 1, url, e, flush=True); time.sleep(10 * (k + 1))
     raise RuntimeError("falhou " + url)
@@ -49,26 +49,54 @@ nomes.pop("", None)
 status["nomes"] = len(nomes)
 print("nomes a casar:", len(nomes), flush=True)
 
-# 2) mês mais recente publicado
+# 2) mês mais recente publicado (a Receita mudou para um compartilhamento Nextcloud; tenta os caminhos conhecidos)
+import base64
+TOKEN = "YggdBLfdninEJX9"
+NC = "https://arquivos.receitafederal.gov.br"
 base = mes = None
-for b in BASES:
-    try:
-        html = get(b, 2).read().decode("latin-1")
-        meses = sorted(set(re.findall(r'href="(\d{4}-\d{2})/?"', html)))
-        if meses: base, mes = b, meses[-1]; break
-    except Exception as e:
-        print("lista falhou", b, e)
+modo = None
+try:
+    req = urllib.request.Request(NC + "/public.php/webdav/", method="PROPFIND",
+        headers={**UA, "Depth": "1", "Authorization": "Basic " + base64.b64encode((TOKEN + ":").encode()).decode()})
+    xml = urllib.request.urlopen(req, timeout=60).read().decode("utf-8", "ignore")
+    meses = sorted(set(re.findall(r"/public\.php/webdav/(\d{4}-\d{2})/", xml)))
+    status["nextcloud_meses"] = meses[-3:]
+    if meses: base, mes, modo = NC, meses[-1], "nextcloud"
+except Exception as e:
+    status["nextcloud_erro"] = str(e)[:200]; print("nextcloud falhou", e, flush=True)
+if not base:
+    for b in BASES:
+        try:
+            html = get(b, 2).read().decode("latin-1")
+            meses = sorted(set(re.findall(r'href="(\d{4}-\d{2})/?"', html)))
+            if meses: base, mes, modo = b, meses[-1], "pasta"; break
+        except Exception as e:
+            status.setdefault("pastas_erro", []).append(str(e)[:120]); print("lista falhou", b, e)
+
+def url_arquivo(nome):
+    if modo == "nextcloud":
+        return f"{NC}/public.php/webdav/{mes}/{nome}"
+    return f"{base}{mes}/{nome}"
+
+def abrir(url):
+    h = dict(UA)
+    if modo == "nextcloud": h["Authorization"] = "Basic " + base64.b64encode((TOKEN + ":").encode()).decode()
+    for k in range(4):
+        try: return urllib.request.urlopen(urllib.request.Request(url, headers=h), timeout=180)
+        except Exception as e: print("tentativa", k + 1, url, e, flush=True); time.sleep(15 * (k + 1))
+    raise RuntimeError("falhou " + url)
+
 if not base:
     status["erro"] = "não achei a pasta da Receita"
 else:
-    status["fonte"] = base + mes + "/"
+    status["fonte"] = f"{modo}: {base} {mes}"
     achados = {}   # nome -> set(cnpj_basico)
     for i in range(10):
-        url = f"{base}{mes}/Empresas{i}.zip"
+        url = url_arquivo(f"Empresas{i}.zip")
         t0 = time.time()
         try:
             tmp = f"/tmp/emp{i}.zip"
-            with get(url) as r, open(tmp, "wb") as f:
+            with abrir(url) as r, open(tmp, "wb") as f:
                 while True:
                     blk = r.read(1 << 20)
                     if not blk: break
