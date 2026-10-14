@@ -1,6 +1,17 @@
 {
- "inicio": "2026-10-14T19:19:39.048809Z",
- "nomes": 1233,
- "erro": "não achei a pasta da Receita",
- "fim": "2026-10-14T19:25:45.556946Z"
+ "inicio": "2026-10-14T19:30:02.879154Z",
+ "nomes": 1118,
+ "nextcloud_meses": [
+  "2026-08",
+  "2026-09",
+  "2026-10"
+ ],
+ "fonte": "nextcloud: https://arquivos.receitafederal.gov.br 2026-10",
+ "falhas": [
+  "Empresas8: falhou https://arquivos.receitafederal.gov.br/public.php/webdav/2026-10/Empresas8.zip",
+  "Empresas9: falhou https://arquivos.receitafederal.gov.br/public.php/webdav/2026-10/Empresas9.zip"
+ ],
+ "casados_unicos": 895,
+ "ambiguos": 80,
+ "fim": "2026-10-14T20:08:51.655012Z"
 }
