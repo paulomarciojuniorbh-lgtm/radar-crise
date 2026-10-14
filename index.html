@@ -285,7 +285,7 @@ button,select,input{font:inherit;color:inherit}
 .monp{display:block}
 .monp .nm{display:block;margin-top:2px}
 .monp .chip{display:inline-block;margin:0 6px 0 0;vertical-align:1px}
-</style></head><body><script>window.CRISE_API = { url: "https://ryhyvzwqtktaaonznizn.supabase.co/rest/v1/crise_processos?select=id,tribunal,uf,numero,numero_fmt,classe,vara,data_ajuizamento,ultimo_mov_data,situacao,devedor,devedor_tipo,cnpj,agro,n_pub,ultima_pub_data,ultima_pub_tipo,eventos,link,visto_ultimo&situacao=neq.cancelado&order=data_ajuizamento.desc", key: "sb_publishable_Ji31DC1ihqZTR7gmLeYTLw_GHgBjWN0" };</script><div class="wrap" id="app">
+</style></head><body><script>window.CRISE_API = { url: "https://ryhyvzwqtktaaonznizn.supabase.co/rest/v1/crise_processos?select=id,tribunal,uf,numero,numero_fmt,classe,vara,data_ajuizamento,ultimo_mov_data,situacao,devedor,devedor_tipo,cnpj,agro,n_pub,ultima_pub_data,ultima_pub_tipo,eventos,link,visto_ultimo,data_estimada,cnpj_fonte&situacao=neq.cancelado&order=data_ajuizamento.desc", key: "sb_publishable_Ji31DC1ihqZTR7gmLeYTLw_GHgBjWN0" };</script><div class="wrap" id="app">
   <header class="top">
     <div class="brand">
       <span class="eyebrow">Recuperações judiciais e falências no Brasil</span>
@@ -441,7 +441,7 @@ button,select,input{font:inherit;color:inherit}
   </div>
 
   <footer class="foot">
-    <span><b>De onde vêm os dados:</b> lista de processos da API pública do DataJud (CNJ) e publicações do Diário de Justiça Eletrônico Nacional (DJEN), atualizadas todo dia. Exterior: CourtListener (processos de falência dos EUA), Portal Citius (Portugal) e Boletín Concursal (Chile). ICMS: exportações por estado do Comex Stat (MDIC). O nome da empresa e os marcos do processo são lidos automaticamente das publicações e podem conter erros: confira sempre no tribunal.</span>
+    <span><b>De onde vêm os dados:</b> três vezes por dia o radar lê o Diário de Justiça Eletrônico Nacional (DJEN) e acha os pedidos novos assim que sai a primeira publicação; a lista completa vem da API pública do DataJud (CNJ), que leva algumas semanas para receber os processos. O CNPJ vem da própria publicação ou, quando o nome da empresa é único, da base aberta da Receita Federal (CNPJ da matriz). Exterior: CourtListener (processos de falência dos EUA), Portal Citius (Portugal) e Boletín Concursal (Chile). ICMS: exportações por estado do Comex Stat (MDIC). O nome da empresa e os marcos do processo são lidos automaticamente das publicações e podem conter erros: confira sempre no tribunal.</span>
     <span><b>Privacidade:</b> o Radar Crise mostra apenas empresas. Quando o devedor é pessoa física (por exemplo, produtor rural), o nome não é exibido.</span>
     <span>Ferramenta de triagem. Não substitui a leitura dos autos nem a orientação de um advogado.</span>
   </footer>
@@ -542,7 +542,7 @@ button,select,input{font:inherit;color:inherit}
     return `<button class="row" data-i="${i}" type="button">
       <span class="rinfo">
         <span class="rtitle">${nomeDe(p)}</span>
-        <span class="rmeta"><span class="cls ${CLS[p.classe] || ""}">${CL[p.classe] || p.classe}</span> · ${esc(p.uf || "")} · ${esc(p.vara || p.tribunal)} · distribuído em ${fmtData(p.data_ajuizamento)}</span>
+        <span class="rmeta"><span class="cls ${CLS[p.classe] || ""}">${CL[p.classe] || p.classe}</span> · ${esc(p.uf || "")} · ${esc(p.vara || p.tribunal)} · ${p.data_estimada ? "1ª publicação em" : "distribuído em"} ${fmtData(p.data_ajuizamento)}</span>
         <span class="chips">${chips}</span>
       </span>
     </button>`;
@@ -568,10 +568,10 @@ button,select,input{font:inherit;color:inherit}
         <div class="addr">Processo ${esc(p.numero_fmt || p.numero)}</div></div>
         <button class="close" data-close="1" type="button" aria-label="Fechar">×</button></div>
       <div class="facts">
-        <div class="fact"><span class="k">Distribuído em</span><span class="v">${fmtData(p.data_ajuizamento)}</span></div>
+        <div class="fact"><span class="k">${p.data_estimada ? "Primeira publicação" : "Distribuído em"}</span><span class="v">${fmtData(p.data_ajuizamento)}</span>${p.data_estimada ? `<span class="conv">achado pelo Diário de Justiça antes de entrar no DataJud</span>` : ""}</div>
         <div class="fact"><span class="k">Vara</span><span class="v">${esc(p.vara || "–")}</span></div>
         <div class="fact"><span class="k">Estado</span><span class="v">${esc(p.uf || "–")}</span></div>
-        <div class="fact"><span class="k">CNPJ</span><span class="v">${esc(p.cnpj || "não encontrado nas publicações")}</span></div>
+        <div class="fact"><span class="k">CNPJ</span><span class="v">${esc(p.cnpj || "ainda não encontrado")}</span>${p.cnpj ? `<span class="conv">${p.cnpj_fonte === "receita" ? "matriz, pela base aberta da Receita Federal" : "lido na publicação do processo"}</span>` : ""}</div>
         <div class="fact"><span class="k">Última publicação</span><span class="v">${p.ultima_pub_data ? fmtData(p.ultima_pub_data + "T12:00:00") : "–"}</span>${p.ultima_pub_tipo ? `<span class="conv">${esc(p.ultima_pub_tipo)}</span>` : ""}</div>
         <div class="fact"><span class="k">Publicações lidas</span><span class="v">${p.n_pub ?? "–"}</span></div>
         <div class="fact"><span class="k">Situação</span><span class="v">${esc(p.situacao)}</span></div>
@@ -589,7 +589,7 @@ button,select,input{font:inherit;color:inherit}
     d.querySelector(".close").focus();
     d.onclick = e => { if (e.target.dataset.close) closeDetail(); };
     $("copy").onclick = () => {
-      const t = `*Radar Crise* · ${CL[p.classe]}\n${p.devedor || (p.devedor_tipo === "PF" ? "Pessoa física" : "Empresa em identificação")}${p.cnpj ? " · CNPJ " + p.cnpj : ""}\n${p.uf} · ${p.vara || p.tribunal} · distribuído em ${fmtData(p.data_ajuizamento)}\nProcesso ${p.numero_fmt || p.numero}${evs.length ? "\nMarcos: " + evs.map(e => EV[e]).join(", ") : ""}`;
+      const t = `*Radar Crise* · ${CL[p.classe]}\n${p.devedor || (p.devedor_tipo === "PF" ? "Pessoa física" : "Empresa em identificação")}${p.cnpj ? " · CNPJ " + p.cnpj : ""}\n${p.uf} · ${p.vara || p.tribunal} · ${p.data_estimada ? "1ª publicação em" : "distribuído em"} ${fmtData(p.data_ajuizamento)}\nProcesso ${p.numero_fmt || p.numero}${evs.length ? "\nMarcos: " + evs.map(e => EV[e]).join(", ") : ""}`;
       try { navigator.clipboard.writeText(t).then(() => toast("Resumo copiado"), () => toast("Não foi possível copiar")); } catch (e) { toast("Não foi possível copiar"); }
     };
   }
@@ -935,7 +935,8 @@ button,select,input{font:inherit;color:inherit}
     const ufs = [...new Set(ALL.map(p => p.uf).filter(Boolean))].sort();
     $("fUF").innerHTML = `<option value="">Todos os estados</option>` + ufs.map(u => `<option>${u}</option>`).join("");
     const ident = ALL.filter(p => p.devedor).length;
-    $("msg").innerHTML = `<div class="source">Fontes: <b>DataJud (CNJ)</b> e <b>Diário de Justiça Eletrônico Nacional</b>, atualizado em ${fmtData(atualizado)}. ${ALL.length.toLocaleString("pt-BR")} processos dos últimos 18 meses; ${ident.toLocaleString("pt-BR")} já com a empresa identificada (a identificação avança a cada hora).</div>`;
+    const comCnpj = ALL.filter(p => p.cnpj).length, viaDjen = ALL.filter(p => p.data_estimada).length;
+    $("msg").innerHTML = `<div class="source">Fontes: <b>Diário de Justiça Eletrônico Nacional</b> (pedidos novos em poucos dias) e <b>DataJud (CNJ)</b>, atualizado em ${fmtData(atualizado)}. ${ALL.length.toLocaleString("pt-BR")} processos dos últimos 18 meses, ${viaDjen.toLocaleString("pt-BR")} achados pelo Diário antes de chegarem ao DataJud; ${ident.toLocaleString("pt-BR")} com a empresa identificada e ${comCnpj.toLocaleString("pt-BR")} com CNPJ.</div>`;
     kpis(); chart(); render(); ganhoComDados(); mostrarView(location.hash.slice(1));
   }).catch(e => { $("msg").innerHTML = `<div class="notice error"><span><strong>Não foi possível carregar.</strong> ${esc(e.message)}</span></div>`; });
 })();
