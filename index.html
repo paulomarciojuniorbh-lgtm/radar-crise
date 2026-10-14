@@ -390,7 +390,7 @@ button,select,input{font:inherit;color:inherit}
     return rows;
   }
   $("msg").innerHTML = `<div class="notice"><span><strong>Carregando processos…</strong></span></div>`;
-  carregar().catch(() => fetch("dados.json").then(r => r.json()).then(j => j.rows)).then(rows => {
+  carregar().catch(() => window.CRISE_SNAPSHOT ? window.CRISE_SNAPSHOT.rows : fetch("dados.json").then(r => r.json()).then(j => j.rows)).then(rows => {
     ALL = rows;
     atualizado = rows.reduce((m, x) => x.visto_ultimo > m ? x.visto_ultimo : m, "");
     const ufs = [...new Set(ALL.map(p => p.uf).filter(Boolean))].sort();
