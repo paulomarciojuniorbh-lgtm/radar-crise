@@ -1,0 +1,25 @@
+name: CNPJ das empresas (Receita Federal)
+on:
+  workflow_dispatch:
+  push:
+    paths: ["cnpj/**", ".github/workflows/cnpj.yml"]
+  schedule:
+    - cron: "17 6 * * 1"   # toda segunda, 03:17 de Brasília
+permissions:
+  contents: write
+jobs:
+  casar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: python cnpj/casar_cnpj.py
+      - name: Salvar resultado
+        run: |
+          git config user.name "radar-crise-bot"
+          git config user.email "radar-crise-bot@users.noreply.github.com"
+          git add data/
+          git diff --cached --quiet || git commit -m "CNPJ da Receita atualizado"
+          git push
