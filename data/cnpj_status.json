@@ -1,13 +1,11 @@
 {
- "inicio": "2026-10-19T13:25:18.094574Z",
- "nomes": 1165,
- "nextcloud_meses": [
-  "2026-08",
-  "2026-09",
-  "2026-10"
+ "inicio": "2026-10-26T13:10:21.595505Z",
+ "nomes": 514,
+ "nextcloud_erro": "Remote end closed connection without response",
+ "pastas_erro": [
+  "falhou https://arquivos.receitafederal.gov.br/dados/cnpj/dados_abertos_cnpj/",
+  "falhou https://dadosabertos.rfb.gov.br/CNPJ/dados_abertos_cnpj/"
  ],
- "fonte": "nextcloud: https://arquivos.receitafederal.gov.br 2026-10",
- "casados_unicos": 777,
- "ambiguos": 141,
- "fim": "2026-10-19T14:09:35.467806Z"
+ "erro": "não achei a pasta da Receita",
+ "fim": "2026-10-26T13:12:51.596834Z"
 }
