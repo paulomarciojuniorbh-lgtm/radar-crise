@@ -1,13 +1,13 @@
 {
- "inicio": "2026-11-02T16:03:48.767965Z",
- "nomes": 537,
+ "inicio": "2026-11-09T16:28:52.069206Z",
+ "nomes": 517,
  "nextcloud_meses": [
   "2026-08",
   "2026-09",
   "2026-10"
  ],
  "fonte": "nextcloud: https://arquivos.receitafederal.gov.br 2026-10",
- "casados_unicos": 55,
- "ambiguos": 144,
- "fim": "2026-11-02T16:47:10.654142Z"
+ "casados_unicos": 24,
+ "ambiguos": 149,
+ "fim": "2026-11-09T17:05:54.532524Z"
 }
